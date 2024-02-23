@@ -22,7 +22,6 @@ export function useAnnotation() {
   const [callItem, setCallItem] = useState<any>();
   let [map, {set, get, setAll, remove}] = useMap<string, Item>([]);
   let mapLast = useLatest(map);
-  // let list = useMemo(() => Array.from(map.values()), [map]);
 
   console.log('useAnnotation', {map});
 
