@@ -5,4 +5,5 @@ export default defineConfig({
   themeConfig: {
     name: '@hocgin/marks',
   },
+  ssr: process.env.NODE_ENV === 'development' ? false : {},
 });

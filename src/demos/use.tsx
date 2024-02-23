@@ -1,6 +1,5 @@
 import React, {useRef} from "react";
-import {useMark} from "@hocgin/marks";
-
+import {Panel, useMark} from "@hocgin/marks";
 
 
 export default () => {
@@ -27,10 +26,12 @@ export default () => {
     <div>
       <h1>Note:</h1>
       {list.map((e, key) => {
-        return <div style={markedStyle} key={`${key}`} data-uid={e.uid} onClick={() => unmark(e.uid)}>{e.desc ?? 'empty'}</div>
+        return <div style={markedStyle} key={`${key}`} data-uid={e.uid}
+                    onClick={() => unmark(e.uid)}>{e.desc ?? 'empty'}</div>
       })}
     </div>
-
+    <hr />
+    <Panel />
 
   </div>;
 }
