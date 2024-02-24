@@ -84,7 +84,6 @@ export const useMark = (target: () => Element, option?: Option) => {
       console.log('click Mask');
       // todo: bug 3. 弹窗点击不消失
       // todo: feature 笔记内容标识，可以一键全部展示
-      // todo: feature 画笔模式，开始画
       // todo: feature 存储选中的画笔(用户配置)
       let entity = await query(option?.storageKey, id);
       let maskPos = getMarkRect(id);
@@ -99,6 +98,10 @@ export const useMark = (target: () => Element, option?: Option) => {
     }
     setMaskState({text, start, end, left, top, height, right, width, bottom})
     setOpen(true);
+    console.log('option', option?.mode === 'pencil');
+    if (option?.mode === 'pencil') {
+      saveMark({text})
+    }
     console.log('可以进行标注操作', {text});
   }, [text]);
 
@@ -115,7 +118,7 @@ export const useMark = (target: () => Element, option?: Option) => {
    * 进行持久化
    * @param value
    */
-  let onChange = (value: ValueType) => {
+  let saveMark = (value: ValueType) => {
     console.log('value', value);
     value.id = value?.id ?? nanoid(11);
     mark({id: value.id, text, note: value?.note, start, end}, value.color);
@@ -144,7 +147,7 @@ export const useMark = (target: () => Element, option?: Option) => {
         e.nativeEvent.stopImmediatePropagation();
         return false
       }}>
-        <MarkCard value={maskState} onChange={onChange} onRemove={onRemove} />
+        <MarkCard value={maskState} onChange={saveMark} onRemove={onRemove} />
       </div>
     </> : <></>}
   </>] as const;
