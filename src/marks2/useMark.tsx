@@ -82,7 +82,7 @@ export const useMark = (target: () => Element, option?: Option) => {
       // todo: bug 3. 弹窗点击不消失
       // todo: feature 笔记内容标识，可以一键全部展示
       // todo: feature 画笔模式，开始画
-      // todo: feature 存储选中的画笔
+      // todo: feature 存储选中的画笔(用户配置)
       let entity = await query(option?.key, id);
       let maskPos = getPos(id);
       setMaskState({...entity, ...maskPos});
