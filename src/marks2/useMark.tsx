@@ -49,6 +49,7 @@ class StorageKit {
 
 interface Option {
   storageKey?: string;
+  // 模式: 画笔 / 手动
   mode: 'pencil' | 'manual';
   queryAll?: (key: string) => Promise<MaskEntity[]>
   remove?: (key: string, id: string) => Promise<void>
