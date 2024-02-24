@@ -10,7 +10,7 @@ import {useMark} from "./useMark";
 export default () => {
   let contentRef = useRef<HTMLDivElement>();
   let [element] = useMark(() => contentRef.current, {
-    mode: 'pencil'
+    // mode: 'pencil'
   });
   return <>
     {element}
