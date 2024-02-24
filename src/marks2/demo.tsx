@@ -14,16 +14,21 @@ export default () => {
   });
   return <>
     {element}
-    <div ref={contentRef}>
-      Hi
-      Hi
-      Hi
-      <h1>Hi</h1>
-      <div>A1234567890</div>
-      <img />
-      <p>B1234567890</p>
-      <p>C1234567890</p>
-      <p>\n</p>
+    <div style={{display: 'flex', flexDirection: 'row'}}>
+      <div ref={contentRef} style={{flex: '1 1'}}>
+        Hi
+        Hi
+        Hi
+        <h1>Hi</h1>
+        <div>A1234567890</div>
+        <img />
+        <p>B1234567890</p>
+        <p>C1234567890</p>
+        <p>\n</p>
+      </div>
+      <div style={{width: 200}}>
+        <h1>目录</h1>
+      </div>
     </div>
 
   </>;
