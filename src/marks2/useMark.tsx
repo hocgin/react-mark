@@ -4,24 +4,10 @@ import {useTextSelection} from "../util/useTextSelection";
 import {MarkCard, ValueType} from "../MarkCard";
 import {nanoid} from "nanoid";
 import {StorageKit} from "../util/storage";
-import {DefaultUserConfig} from "../type";
+import {DefaultUserConfig, MaskEntity, UserConfig} from "../type";
 import {MaskRect, useMarkJS} from "../util/useMarkJS";
 
 type MaskState = MaskEntity & MaskRect;
-
-export interface MaskEntity {
-  id?: string;
-  color?: string;
-  end: number;
-  start: number;
-  text: string;
-  note?: string;
-}
-
-interface UserConfig {
-  color?: string;
-}
-
 
 interface Option {
   storageKey?: string;

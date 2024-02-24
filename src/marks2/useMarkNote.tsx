@@ -1,6 +1,10 @@
 import React from "react";
+import {StorageOpt} from "../type";
 
-export const useMarkNote = () => {
+type Option = {} & StorageOpt;
+
+export const useMarkNote = (option: Option) => {
+
 
   return [<>
   </>];
