@@ -1,14 +1,14 @@
 import React, {useEffect, useMemo, useRef, useState} from "react";
-import {useBoolean, useClickAway, useUpdateEffect} from "ahooks";
-import {MarkCard, ValueType} from "../MarkCard";
-import {useTextSelection} from '../util/useTextSelection';
-import {useMarkJS} from '../util/useMarkJS';
-import {nanoid} from "nanoid";
 import {useMark} from "./useMark";
+import {useMarkNote} from "./useMarkNote";
+import {StorageKit} from "../util/storage";
 
 
 export default () => {
   let contentRef = useRef<HTMLDivElement>();
+  let [nodeElements] = useMarkNote({
+    queryAll: StorageKit.queryAll
+  });
   let [element] = useMark(() => contentRef.current, {
     // mode: 'pencil'
   });
@@ -28,6 +28,9 @@ export default () => {
       </div>
       <div style={{width: 200}}>
         <h1>目录</h1>
+        <div>
+          {nodeElements}
+        </div>
       </div>
     </div>
 
