@@ -178,12 +178,12 @@ export const useMark = (target: () => Element, option?: Option) => {
   let saveMark = (value: ValueType) => {
     console.log('value', value);
     value.id = value?.id ?? nanoid(11);
-    let color = value.color ?? userConfig?.color;
-    mark({id: value.id, text, note: value?.note, start, end}, color);
+    value.color = value.color ?? userConfig?.color;
+    mark({id: value.id, text, note: value?.note, start, end}, value.color);
     let maskEntity = {text, start, end, ...value};
     setMaskState({left, top, height, right, width, bottom, ...maskEntity});
-    if (color !== userConfig?.color) {
-      let newConfig = {...userConfig, color};
+    if (value.color !== userConfig?.color) {
+      let newConfig = {...userConfig, color: value.color};
       setUserConfig(newConfig);
       saveUserConfig(storageKey, newConfig);
     }
