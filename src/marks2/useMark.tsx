@@ -45,7 +45,7 @@ async function queryAll(key: string) {
 }
 
 interface Option {
-  key?: string;
+  storageKey?: string;
 }
 
 /**
@@ -66,7 +66,7 @@ export const useMark = (target: () => Element, option?: Option) => {
   }, [maskState]);
 
   useAsyncEffect(async () => {
-    let all = await queryAll(option?.key);
+    let all = await queryAll(option?.storageKey);
     all.forEach(e => mark(e, e.color));
   }, []);
 
@@ -83,7 +83,7 @@ export const useMark = (target: () => Element, option?: Option) => {
       // todo: feature 笔记内容标识，可以一键全部展示
       // todo: feature 画笔模式，开始画
       // todo: feature 存储选中的画笔(用户配置)
-      let entity = await query(option?.key, id);
+      let entity = await query(option?.storageKey, id);
       let maskPos = getPos(id);
       setMaskState({...entity, ...maskPos});
       setOpen(true);
@@ -118,7 +118,7 @@ export const useMark = (target: () => Element, option?: Option) => {
     mark({id: value.id, text, note: value?.note, start, end}, value.color);
     let maskEntity = {text, start, end, ...value};
     setMaskState({left, top, height, right, width, bottom, ...maskEntity});
-    saveOrUpdate(option?.key, maskEntity);
+    saveOrUpdate(option?.storageKey, maskEntity);
 
     // {text, start, end, left, top, height, right, width, bottom, ...value}
   };
@@ -126,7 +126,7 @@ export const useMark = (target: () => Element, option?: Option) => {
     unmark(id);
     setMaskState(undefined);
     setOpen(false);
-    remove(option?.key, id);
+    remove(option?.storageKey, id);
   };
 
   return [<>
