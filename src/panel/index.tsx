@@ -74,7 +74,7 @@ export const ColorSelect: React.FC<ColorSelectProps> = ({...props}) => {
       let backgroundColor = `rgb(${color})`;
       let selectBackgroundColor = `rgba(${color}, 0.3)`;
       return <div key={key} className={classNames('ColorSelectItem', {
-        ['active']: selectColor === backgroundColor,
+        ['active']: selectColor === selectBackgroundColor,
       })} onClick={() => setSelectColor(selectBackgroundColor)}>
         <div className={classNames('ColorSelectItemInner')} style={{backgroundColor: backgroundColor}} />
       </div>;
