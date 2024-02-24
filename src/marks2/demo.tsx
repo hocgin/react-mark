@@ -7,7 +7,10 @@ import {StorageKit} from "../util/storage";
 export default () => {
   let contentRef = useRef<HTMLDivElement>();
   let [nodeElements] = useMarkNote({
-    queryAll: StorageKit.queryAll
+    storageKey: 'MK',
+    queryAll: StorageKit.queryAll,
+    saveOrUpdate: StorageKit.saveOrUpdate,
+    remove: StorageKit.remove,
   });
   let [element] = useMark(() => contentRef.current, {
     // mode: 'pencil'

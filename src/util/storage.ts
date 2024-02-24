@@ -27,6 +27,7 @@ export class StorageKit {
 
   static queryAll = async (key: string) => {
     key = `${key}-ME`;
+    console.log('queryAll', key);
 
     let result = [];
     for (let i = 0; i < localStorage.length; i++) {
