@@ -26,7 +26,7 @@ export default () => {
         <p>C1234567890</p>
         <p>\n</p>
       </div>
-      <div style={{width: 200}}>
+      <div style={{width: 500}}>
         <h1>目录</h1>
         <div>
           {nodeElements}

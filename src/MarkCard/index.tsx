@@ -56,5 +56,7 @@ export const MarkCard: React.FC<MarkCardProps> = ({...props}) => {
   </div>;
 }
 
+export const x = () => {
 
+}
 
