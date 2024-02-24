@@ -76,7 +76,7 @@ export const useMark = (target: () => Element, option?: Option) => {
   //   setOpen(false);
   // }, panelRef);
 
-  let {mark, unmark, getPos} = useMarkJS(target, {
+  let {mark, unmark, getMarkPos} = useMarkJS(target, {
     onClickMark: async (id, event) => {
       console.log('click Mask');
       // todo: bug 3. 弹窗点击不消失
@@ -84,7 +84,7 @@ export const useMark = (target: () => Element, option?: Option) => {
       // todo: feature 画笔模式，开始画
       // todo: feature 存储选中的画笔(用户配置)
       let entity = await query(option?.storageKey, id);
-      let maskPos = getPos(id);
+      let maskPos = getMarkPos(id);
       setMaskState({...entity, ...maskPos});
       setOpen(true);
     },

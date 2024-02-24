@@ -65,7 +65,7 @@ export function useMarkJS(target: () => Element, option?: MarkJSOption) {
         debug: true
       })
     },
-    getPos: (id: string) => {
+    getMarkPos: (id: string) => {
       let maskEl = queryMarkElement(id);
       const {height, width, top, left, right, bottom} = maskEl.getBoundingClientRect();
       return {height, width, top, left, right, bottom} as MaskPos;
