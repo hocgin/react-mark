@@ -46,6 +46,7 @@ async function queryAll(key: string) {
 
 interface Option {
   storageKey?: string;
+  mode: 'pencil' | 'manual';
 }
 
 /**
@@ -62,7 +63,9 @@ export const useMark = (target: () => Element, option?: Option) => {
   const [maskState, setMaskState] = useState<MaskState>();
   let {text, start, end, left, top, height, right, width, bottom} = useTextSelection(target);
   let {fixTop, fixLeft} = useMemo(() => {
-    return {fixTop: (maskState?.top + maskState?.height) ?? 0, fixLeft: (maskState?.left + maskState?.width) ?? 0}
+    let fixTop = (maskState?.top + maskState?.height) ?? 0;
+    let fixLeft = (maskState?.left + maskState?.width) ?? 0;
+    return {fixTop: fixTop, fixLeft: fixLeft}
   }, [maskState]);
 
   useAsyncEffect(async () => {
