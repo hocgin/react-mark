@@ -60,11 +60,15 @@ export const MarkCard: React.FC<MarkCardProps> = ({...props}) => {
 // index.MarkNoteCard.less
 interface MarkNoteCardOption {
   value: MaskEntity;
+  onChange?: (value: MaskEntity) => void
+  onRemove?: (id: string) => void;
 }
 
-export const MarkNoteCard: React.FC<MarkNoteCardOption> = ({value, ...props}) => {
-  let [open, {set: setOpen, toggle: toggleOpen}] = useBoolean(false);
-
+export const MarkNoteCard: React.FC<MarkNoteCardOption> = ({...props}) => {
+  let [open, {toggle: toggleOpen}] = useBoolean(false);
+  const [value, setValue] = useControllableValue<ValueType>(props, {
+    defaultValue: undefined,
+  });
   return <div className={classNames("MarkNote-Card")}>
     <div className={classNames("MarkNote-CardHead")} style={{borderColor: value?.color}}>
       {value?.text}
@@ -75,15 +79,16 @@ export const MarkNoteCard: React.FC<MarkNoteCardOption> = ({value, ...props}) =>
         {open ? <div className={"MarkNote-CardHeadRightInner"}>
           <Divider type={'vertical'} orientationMargin={0} />
           <ColorSelect value={value?.color} onChange={(color) => {
+            setValue(v => ({...v, color}))
           }} />
         </div> : <div style={{flex: '1 1'}} />}
-        <Button size={'small'} type={"text"} onClick={() => {
-        }} ghost><DeleteFilled /></Button>
+        <Button size={'small'} type={"text"} onClick={() => props?.onRemove?.(value?.id)}
+                ghost><DeleteFilled /></Button>
       </div>
     </div>
     {open ? <div className={classNames('MarkNote-CardFooter')}>
       <Editor editable={true} value={value?.note} onChange={(note) => {
-        // setValue(v => ({...v, note}))
+        setValue(v => ({...v, note}))
       }} />
     </div> : <></>}
   </div>;
