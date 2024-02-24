@@ -57,9 +57,11 @@ class StorageKit {
     return result as MaskEntity[];
   }
 
+  /// ===========
 
   static saveUserConfig = async (key: string, config: UserConfig) => {
     key = `${key}-UC`;
+    console.log('saveUserConfig', config);
     localStorage.setItem(key, JSON.stringify(config));
   };
 
@@ -69,7 +71,6 @@ class StorageKit {
     if (!text) {
       return DefaultUserConfig;
     }
-
     return JSON.parse(text);
   };
 }
@@ -99,7 +100,7 @@ let DefaultUserConfig = {color: DefaultMarkColor};
 export const useMark = (target: () => Element, option?: Option) => {
   let [open, {set: setOpen}] = useBoolean(false);
   let [userConfig, setUserConfig] = useState<UserConfig>(DefaultUserConfig);
-  const {queryAll, query, remove, saveOrUpdate, getUserConfig, saveUserConfig} = useMemo(() => {
+  const {storageKey, queryAll, query, remove, saveOrUpdate, getUserConfig, saveUserConfig} = useMemo(() => {
     return {
       queryAll: option?.queryAll ?? StorageKit.queryAll,
       query: option?.query ?? StorageKit.query,
@@ -107,6 +108,7 @@ export const useMark = (target: () => Element, option?: Option) => {
       saveOrUpdate: option?.saveOrUpdate ?? StorageKit.saveOrUpdate,
       saveUserConfig: option?.saveUserConfig ?? StorageKit.saveUserConfig,
       getUserConfig: option?.getUserConfig ?? StorageKit.getUserConfig,
+      storageKey: option?.storageKey ?? 'MK',
     };
   }, [option]);
 
@@ -121,11 +123,11 @@ export const useMark = (target: () => Element, option?: Option) => {
 
   useAsyncEffect(async () => {
     // 初始化备注
-    let all = await queryAll(option?.storageKey);
+    let all = await queryAll(storageKey);
     all.forEach(e => mark(e, e.color));
 
     // 初始化用户配置
-    let userConfig = await getUserConfig(option?.storageKey);
+    let userConfig = await getUserConfig(storageKey);
     setUserConfig(userConfig);
   }, []);
 
@@ -140,7 +142,7 @@ export const useMark = (target: () => Element, option?: Option) => {
       // todo: bug 3. 弹窗点击不消失
       // todo: feature 笔记内容标识，可以一键全部展示
       // todo: feature 存储选中的画笔(用户配置)
-      let entity = await query(option?.storageKey, id);
+      let entity = await query(storageKey, id);
       let maskPos = getMarkRect(id);
       setMaskState({...entity, ...maskPos});
       setOpen(true);
@@ -151,9 +153,9 @@ export const useMark = (target: () => Element, option?: Option) => {
       setOpen(false);
       return;
     }
-    setMaskState({text, start, end, left, top, height, right, width, bottom})
+    setMaskState({text, start, color: userConfig?.color, end, left, top, height, right, width, bottom})
     setOpen(true);
-    console.log('option', option?.mode === 'pencil');
+    console.log('option', option?.mode === 'pencil', {userConfig});
     if (option?.mode === 'pencil') {
       saveMark({text})
     }
@@ -183,15 +185,15 @@ export const useMark = (target: () => Element, option?: Option) => {
     if (color !== userConfig?.color) {
       let newConfig = {...userConfig, color};
       setUserConfig(newConfig);
-      saveUserConfig(option?.storageKey, newConfig);
+      saveUserConfig(storageKey, newConfig);
     }
-    saveOrUpdate(option?.storageKey, maskEntity);
+    saveOrUpdate(storageKey, maskEntity);
   };
   let onRemove = (id: string) => {
     unmark(id);
     setMaskState(undefined);
     setOpen(false);
-    remove(option?.storageKey, id);
+    remove(storageKey, id);
   };
 
   return [<>

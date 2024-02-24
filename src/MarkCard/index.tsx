@@ -2,7 +2,7 @@ import React, {useMemo, useState} from "react";
 import {HighlightDropdown} from "../Dropdown/HighlightDropdown";
 import classNames from "classnames";
 import './index.less';
-import {useBoolean, useControllableValue} from "ahooks";
+import {useBoolean, useControllableValue, useLocalStorageState} from "ahooks";
 import {ColorSelect} from "../index";
 import {Button, Divider} from "antd";
 import {Editor} from "@hocgin/editor";
@@ -32,7 +32,7 @@ export const MarkCard: React.FC<MarkCardProps> = ({...props}) => {
   });
   let color = useMemo(() => value?.color ?? DefaultMarkColor, [value?.color]);
 
-  console.log('MarkCard.value', {value});
+  console.log('MarkCard.value', {value, color});
   return <div className={classNames('Mark-Card', {
     ['Mark-CardOpen']: open
   })}>
