@@ -47,6 +47,10 @@ async function queryAll(key: string) {
 interface Option {
   storageKey?: string;
   mode: 'pencil' | 'manual';
+  queryAll?: (key: string) => Promise<MaskEntity[]>
+  remove?: (key: string, id: string) => Promise<void>
+  query?: (key: string, id: string) => Promise<MaskEntity>
+  saveOrUpdate?: (key: string, entity: MaskEntity) => Promise<void>
 }
 
 /**
