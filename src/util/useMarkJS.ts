@@ -3,7 +3,7 @@ import Mark from "mark.js";
 import {nanoid} from 'nanoid';
 import {ColorList} from "@hocgin/marks/panel";
 
-export interface MaskPos {
+export interface MaskRect {
   top: number;
   left: number;
   bottom: number;
@@ -68,7 +68,7 @@ export function useMarkJS(target: () => Element, option?: MarkJSOption) {
     getMarkRect: (id: string) => {
       let maskEl = queryMarkElement(id);
       const {height, width, top, left, right, bottom} = maskEl.getBoundingClientRect();
-      return {height, width, top, left, right, bottom} as MaskPos;
+      return {height, width, top, left, right, bottom} as MaskRect;
     },
     showAll: () => {
 

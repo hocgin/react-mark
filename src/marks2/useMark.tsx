@@ -1,11 +1,11 @@
 import {useAsyncEffect, useBoolean, useClickAway, useUpdateEffect} from "ahooks";
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {useTextSelection} from "@hocgin/marks/util/useTextSelection";
-import {MaskPos, useMarkJS} from "@hocgin/marks/util/useMarkJS";
+import {MaskRect, useMarkJS} from "@hocgin/marks/util/useMarkJS";
 import {MarkCard, ValueType} from "@hocgin/marks/MarkCard";
 import {nanoid} from "nanoid";
 
-type MaskState = MaskEntity & MaskPos;
+type MaskState = MaskEntity & MaskRect;
 
 interface MaskEntity {
   id?: string;
