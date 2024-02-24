@@ -16,33 +16,36 @@ interface MaskEntity {
   note?: string;
 }
 
+class StorageKit {
 
-async function query(key: string, id: string) {
-  let item = localStorage.getItem(id);
-  console.log('query', id, item);
-  if (item) {
-    return JSON.parse(item) as MaskEntity;
+  static query = async (key: string, id: string) => {
+    let item = localStorage.getItem(id);
+    console.log('query', id, item);
+    if (item) {
+      return JSON.parse(item) as MaskEntity;
+    }
+  }
+
+  static saveOrUpdate = async (key: string, entity: MaskEntity) => {
+    let value = JSON.stringify(entity);
+    console.log('saveOrUpdate', {entity});
+    localStorage.setItem(entity.id, value);
+  }
+
+  static remove = async (key: string, id: string) => {
+    localStorage.removeItem(id);
+  }
+
+  static queryAll = async (key: string) => {
+    let result = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      let item = localStorage.getItem(localStorage.key(i));
+      result.push(JSON.parse(item));
+    }
+    return result as MaskEntity[];
   }
 }
 
-async function saveOrUpdate(key: string, entity: MaskEntity) {
-  let value = JSON.stringify(entity);
-  console.log('saveOrUpdate', {entity});
-  localStorage.setItem(entity.id, value);
-}
-
-async function remove(key: string, id: string) {
-  localStorage.removeItem(id);
-}
-
-async function queryAll(key: string) {
-  let result = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    let item = localStorage.getItem(localStorage.key(i));
-    result.push(JSON.parse(item));
-  }
-  return result as MaskEntity[];
-}
 
 interface Option {
   storageKey?: string;
@@ -62,8 +65,16 @@ interface Option {
  */
 export const useMark = (target: () => Element, option?: Option) => {
   let [open, {set: setOpen}] = useBoolean(false);
-  // let [show, {set: setShow}] = useBoolean(option?.show);
-  let panelRef = useRef<HTMLDivElement>();
+  const {queryAll, query, remove, saveOrUpdate} = useMemo(() => {
+    return {
+      queryAll: option?.queryAll ?? StorageKit.queryAll,
+      query: option?.query ?? StorageKit.query,
+      remove: option?.remove ?? StorageKit.remove,
+      saveOrUpdate: option?.saveOrUpdate ?? StorageKit.saveOrUpdate,
+    };
+  }, [option]);
+
+  // panelRef = useRef<HTMLDivElement>();
   const [maskState, setMaskState] = useState<MaskState>();
   let {text, start, end, left, top, height, right, width, bottom} = useTextSelection(target);
   let {fixTop, fixLeft} = useMemo(() => {
@@ -143,7 +154,7 @@ export const useMark = (target: () => Element, option?: Option) => {
     {/*笔记标记*/}
     {/*弹窗部分*/}
     {open ? <>
-      <div ref={panelRef} style={maskStyle} onMouseDown={e => {
+      <div style={maskStyle} onMouseDown={e => {
         e.preventDefault();
         e.stopPropagation();
         e.nativeEvent.stopPropagation();
