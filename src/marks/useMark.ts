@@ -1,15 +1,23 @@
 import React, {useRef, useState} from "react";
 import {useMarkSelector} from "./useMarkSelector";
-import {useAnnotation} from "./useAnnotation";
+import {Item, useAnnotation} from "./useAnnotation";
 
 interface MarkOption {
   el: React.MutableRefObject<Element | any>;
 }
 
+export const defaultColor = 'rgba(255, 255, 0, 0.3)';
+
 export function useMark(option: MarkOption) {
   const descText = useRef<string>();
   const activeUidRef = useRef<string>();
-  let {list: records, remove: removeRecord, add: addRecord, addEdit: addEditRecord} = useAnnotation();
+  let {
+    list: records,
+    remove: removeRecord,
+    add: addRecord,
+    addEdit: addEditRecord,
+    update: updateRecord
+  } = useAnnotation();
   let {mark, unmark} = useMarkSelector({
     el: option.el,
     // [点击标注] 点击后，进入编辑和填写备注界面
@@ -47,6 +55,9 @@ export function useMark(option: MarkOption) {
       console.log('useMark.unmark', {uid});
       removeRecord(uid);
       unmark(uid);
+    },
+    update: (item: Item) => {
+      updateRecord(item)
     },
   };
 }

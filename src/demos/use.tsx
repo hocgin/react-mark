@@ -4,14 +4,8 @@ import {Panel, useMark} from "@hocgin/marks";
 
 export default () => {
   let bodyRef = useRef<HTMLDivElement | any>();
-  let {list, unmark} = useMark({el: bodyRef});
+  let {list, unmark, update} = useMark({el: bodyRef});
   console.log('useMark.list', {list});
-
-  let markedStyle = {
-    borderLeft: '8px solid #fff',
-    paddingLeft: 5,
-  };
-
 
   return <div>
     <div ref={bodyRef}>
@@ -26,12 +20,14 @@ export default () => {
     <div>
       <h1>Note:</h1>
       {list.map((e, key) => {
-        return <div style={markedStyle} key={`${key}`} data-uid={e.uid}
-                    onClick={() => unmark(e.uid)}>{e.desc ?? 'empty'}</div>
+        return <Panel editable={e.isEdit} defaultValue={{uid: e.uid, text: e.desc}}
+                      onRemove={({uid}) => unmark(uid)}
+                      onSubmit={e => update({uid: e.uid, color: e.color, desc: e.text, isEdit: false})}
+                      onClose={e => update({uid: e.uid, color: e.color, desc: e.text, isEdit: false})} />
       })}
     </div>
     <hr />
-    <Panel />
-
+    <Panel editable={false} defaultValue={{color: 'red', text: "666"}}
+           onSubmit={console.log.bind(this, 'Panel.onSubmit')} />
   </div>;
 }

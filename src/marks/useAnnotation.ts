@@ -8,7 +8,8 @@ let markedArr = [];
 export interface Item {
   uid: string;
   desc: string;
-  isEdit: boolean;
+  color?: string;
+  isEdit?: boolean;
 }
 
 export interface SaveStore {
@@ -120,5 +121,12 @@ export function useAnnotation() {
     add: addRecord,
     addEdit: addEditRecord,
     remove: _remove,
+    update: (item: Item) => {
+      let uid = item.uid;
+      let markSelector = 'data-selector';
+      let eleArr = document.querySelectorAll(`span[${markSelector}="${uid}"]`) as NodeListOf<HTMLSpanElement>;
+      eleArr.forEach(e => e.style.backgroundColor = item.color);
+      set(uid, item)
+    },
   }
 }
