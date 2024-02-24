@@ -1,7 +1,7 @@
 import {useAsyncEffect, useBoolean, useClickAway, useUpdateEffect} from "ahooks";
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {useTextSelection} from "@hocgin/marks/util/useTextSelection";
-import {MaskRect, useMarkJS} from "@hocgin/marks/util/useMarkJS";
+import {DefaultMarkColor, MaskRect, useMarkJS} from "@hocgin/marks/util/useMarkJS";
 import {MarkCard, ValueType} from "@hocgin/marks/MarkCard";
 import {nanoid} from "nanoid";
 
@@ -16,34 +16,62 @@ interface MaskEntity {
   note?: string;
 }
 
+interface UserConfig {
+  color?: string;
+}
+
 class StorageKit {
 
   static query = async (key: string, id: string) => {
-    let item = localStorage.getItem(id);
-    console.log('query', id, item);
+    key = `${key}-ME-${id}`;
+    let item = localStorage.getItem(key);
+    console.log('query', key, item);
     if (item) {
       return JSON.parse(item) as MaskEntity;
     }
   }
 
   static saveOrUpdate = async (key: string, entity: MaskEntity) => {
+    let id = entity.id;
+    key = `${key}-ME-${id}`;
     let value = JSON.stringify(entity);
     console.log('saveOrUpdate', {entity});
-    localStorage.setItem(entity.id, value);
+    localStorage.setItem(key, value);
   }
 
   static remove = async (key: string, id: string) => {
-    localStorage.removeItem(id);
+    key = `${key}-ME-${id}`;
+    localStorage.removeItem(key);
   }
 
   static queryAll = async (key: string) => {
+    key = `${key}-ME`;
+
     let result = [];
     for (let i = 0; i < localStorage.length; i++) {
-      let item = localStorage.getItem(localStorage.key(i));
+      let ukey = localStorage.key(i);
+      if (!ukey.startsWith(key)) continue;
+      let item = localStorage.getItem(ukey);
       result.push(JSON.parse(item));
     }
     return result as MaskEntity[];
   }
+
+
+  static saveUserConfig = async (key: string, config: UserConfig) => {
+    key = `${key}-UC`;
+    localStorage.setItem(key, JSON.stringify(config));
+  };
+
+  static getUserConfig = async (key: string) => {
+    key = `${key}-UC`;
+    let text = localStorage.getItem(key);
+    if (!text) {
+      return DefaultUserConfig;
+    }
+
+    return JSON.parse(text);
+  };
 }
 
 
@@ -55,8 +83,12 @@ interface Option {
   remove?: (key: string, id: string) => Promise<void>
   query?: (key: string, id: string) => Promise<MaskEntity>
   saveOrUpdate?: (key: string, entity: MaskEntity) => Promise<void>
+  //
+  getUserConfig?: (key: string) => UserConfig
+  saveUserConfig?: (key: string, config: UserConfig) => void
 }
 
+let DefaultUserConfig = {color: DefaultMarkColor};
 /**
  *
  * - 手动标注
@@ -66,12 +98,15 @@ interface Option {
  */
 export const useMark = (target: () => Element, option?: Option) => {
   let [open, {set: setOpen}] = useBoolean(false);
-  const {queryAll, query, remove, saveOrUpdate} = useMemo(() => {
+  let [userConfig, setUserConfig] = useState<UserConfig>(DefaultUserConfig);
+  const {queryAll, query, remove, saveOrUpdate, getUserConfig, saveUserConfig} = useMemo(() => {
     return {
       queryAll: option?.queryAll ?? StorageKit.queryAll,
       query: option?.query ?? StorageKit.query,
       remove: option?.remove ?? StorageKit.remove,
       saveOrUpdate: option?.saveOrUpdate ?? StorageKit.saveOrUpdate,
+      saveUserConfig: option?.saveUserConfig ?? StorageKit.saveUserConfig,
+      getUserConfig: option?.getUserConfig ?? StorageKit.getUserConfig,
     };
   }, [option]);
 
@@ -85,10 +120,14 @@ export const useMark = (target: () => Element, option?: Option) => {
   }, [maskState]);
 
   useAsyncEffect(async () => {
+    // 初始化备注
     let all = await queryAll(option?.storageKey);
     all.forEach(e => mark(e, e.color));
-  }, []);
 
+    // 初始化用户配置
+    let userConfig = await getUserConfig(option?.storageKey);
+    setUserConfig(userConfig);
+  }, []);
 
   // useClickAway((e) => {
   //   console.log('useClickAway', {e});
@@ -137,12 +176,16 @@ export const useMark = (target: () => Element, option?: Option) => {
   let saveMark = (value: ValueType) => {
     console.log('value', value);
     value.id = value?.id ?? nanoid(11);
-    mark({id: value.id, text, note: value?.note, start, end}, value.color);
+    let color = value.color ?? userConfig?.color;
+    mark({id: value.id, text, note: value?.note, start, end}, color);
     let maskEntity = {text, start, end, ...value};
     setMaskState({left, top, height, right, width, bottom, ...maskEntity});
+    if (color !== userConfig?.color) {
+      let newConfig = {...userConfig, color};
+      setUserConfig(newConfig);
+      saveUserConfig(option?.storageKey, newConfig);
+    }
     saveOrUpdate(option?.storageKey, maskEntity);
-
-    // {text, start, end, left, top, height, right, width, bottom, ...value}
   };
   let onRemove = (id: string) => {
     unmark(id);
