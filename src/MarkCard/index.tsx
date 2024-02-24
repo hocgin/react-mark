@@ -2,13 +2,14 @@ import React, {useMemo, useState} from "react";
 import {HighlightDropdown} from "../Dropdown/HighlightDropdown";
 import classNames from "classnames";
 import './index.less';
-import {useBoolean, useControllableValue, useLocalStorageState} from "ahooks";
+import './index.MarkNoteCard.less';
+import {useBoolean, useControllableValue} from "ahooks";
 import {ColorSelect} from "../index";
 import {Button, Divider} from "antd";
 import {Editor} from "@hocgin/editor";
 import {DeleteFilled} from "@ant-design/icons";
-import {ColorList} from "@hocgin/marks/panel";
 import {DefaultMarkColor} from "../util/useMarkJS";
+import {MaskEntity} from "../type";
 
 export interface ValueType {
   id?: string;
@@ -56,7 +57,35 @@ export const MarkCard: React.FC<MarkCardProps> = ({...props}) => {
   </div>;
 }
 
-export const x = () => {
+// index.MarkNoteCard.less
+interface MarkNoteCardOption {
+  value: MaskEntity;
+}
 
+export const MarkNoteCard: React.FC<MarkNoteCardOption> = ({value, ...props}) => {
+  let [open, {set: setOpen, toggle: toggleOpen}] = useBoolean(false);
+
+  return <div className={classNames("MarkNote-Card")}>
+    <div className={classNames("MarkNote-CardHead")} style={{borderColor: value?.color}}>
+      {value?.text}
+    </div>
+    <div className={classNames("MarkNote-CardBody")}>
+      <HighlightDropdown color={value?.color} open={open} onLeftClick={toggleOpen} />
+      <div className={"MarkNote-CardHeadRight"}>
+        {open ? <div className={"MarkNote-CardHeadRightInner"}>
+          <Divider type={'vertical'} orientationMargin={0} />
+          <ColorSelect value={value?.color} onChange={(color) => {
+          }} />
+        </div> : <div style={{flex: '1 1'}} />}
+        <Button size={'small'} type={"text"} onClick={() => {
+        }} ghost><DeleteFilled /></Button>
+      </div>
+    </div>
+    {open ? <div className={classNames('MarkNote-CardFooter')}>
+      <Editor editable={true} value={value?.note} onChange={(note) => {
+        // setValue(v => ({...v, note}))
+      }} />
+    </div> : <></>}
+  </div>;
 }
 
