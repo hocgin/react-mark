@@ -141,7 +141,6 @@ export const useMark = (target: () => Element, option?: Option) => {
       console.log('click Mask');
       // todo: bug 3. 弹窗点击不消失
       // todo: feature 笔记内容标识，可以一键全部展示
-      // todo: feature 存储选中的画笔(用户配置)
       let entity = await query(storageKey, id);
       let maskPos = getMarkRect(id);
       setMaskState({...entity, ...maskPos});
