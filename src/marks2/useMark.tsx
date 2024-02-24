@@ -1,13 +1,15 @@
-import {useAsyncEffect, useBoolean, useClickAway, useUpdateEffect} from "ahooks";
-import React, {useEffect, useMemo, useRef, useState} from "react";
-import {useTextSelection} from "@hocgin/marks/util/useTextSelection";
-import {DefaultMarkColor, MaskRect, useMarkJS} from "@hocgin/marks/util/useMarkJS";
-import {MarkCard, ValueType} from "@hocgin/marks/MarkCard";
+import {useAsyncEffect, useBoolean, useUpdateEffect} from "ahooks";
+import React, {useMemo, useState} from "react";
+import {useTextSelection} from "../util/useTextSelection";
+import {MarkCard, ValueType} from "../MarkCard";
 import {nanoid} from "nanoid";
+import {StorageKit} from "../util/storage";
+import {DefaultUserConfig} from "../type";
+import {MaskRect, useMarkJS} from "../util/useMarkJS";
 
 type MaskState = MaskEntity & MaskRect;
 
-interface MaskEntity {
+export interface MaskEntity {
   id?: string;
   color?: string;
   end: number;
@@ -18,61 +20,6 @@ interface MaskEntity {
 
 interface UserConfig {
   color?: string;
-}
-
-class StorageKit {
-
-  static query = async (key: string, id: string) => {
-    key = `${key}-ME-${id}`;
-    let item = localStorage.getItem(key);
-    console.log('query', key, item);
-    if (item) {
-      return JSON.parse(item) as MaskEntity;
-    }
-  }
-
-  static saveOrUpdate = async (key: string, entity: MaskEntity) => {
-    let id = entity.id;
-    key = `${key}-ME-${id}`;
-    let value = JSON.stringify(entity);
-    console.log('saveOrUpdate', {entity});
-    localStorage.setItem(key, value);
-  }
-
-  static remove = async (key: string, id: string) => {
-    key = `${key}-ME-${id}`;
-    localStorage.removeItem(key);
-  }
-
-  static queryAll = async (key: string) => {
-    key = `${key}-ME`;
-
-    let result = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      let ukey = localStorage.key(i);
-      if (!ukey.startsWith(key)) continue;
-      let item = localStorage.getItem(ukey);
-      result.push(JSON.parse(item));
-    }
-    return result as MaskEntity[];
-  }
-
-  /// ===========
-
-  static saveUserConfig = async (key: string, config: UserConfig) => {
-    key = `${key}-UC`;
-    console.log('saveUserConfig', config);
-    localStorage.setItem(key, JSON.stringify(config));
-  };
-
-  static getUserConfig = async (key: string) => {
-    key = `${key}-UC`;
-    let text = localStorage.getItem(key);
-    if (!text) {
-      return DefaultUserConfig;
-    }
-    return JSON.parse(text);
-  };
 }
 
 
@@ -89,7 +36,6 @@ interface Option {
   saveUserConfig?: (key: string, config: UserConfig) => void
 }
 
-let DefaultUserConfig = {color: DefaultMarkColor};
 /**
  *
  * - 手动标注
