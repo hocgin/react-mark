@@ -4,9 +4,6 @@ import {useMark} from "@hocgin/marks";
 
 const elementId = 'test';
 
-document.addEventListener('DOMContentLoaded', async () => {
-
-});
 export default () => {
   useEffect(() => {
     if (document.getElementById(elementId)) return;
