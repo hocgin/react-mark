@@ -1,6 +1,5 @@
 import {useEffect, useRef} from "react";
 import Mark from "mark.js";
-import {nanoid} from 'nanoid';
 import {ColorList} from "@hocgin/marks/panel";
 
 export interface MaskRect {

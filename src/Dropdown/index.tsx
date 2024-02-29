@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'antd';
+import {Button} from '../Button';
 import {useState} from 'react';
 import Icon, {CaretRightOutlined, CaretLeftOutlined} from '@ant-design/icons';
 import './index.less';
@@ -13,12 +13,11 @@ export const Dropdown: React.FC<{
   let [color, setColor] = useState<string>('#000');
   return (
     <div className={`Mark-ColorDropdown`}>
-      <Button type="text"
-              onClick={onClick?.bind(this, color)}
+      <Button onClick={onClick?.bind(this, color)}
               className={`Mark-LeftBtn`}>
         <Icon component={renderIcon?.bind(this, color)} />
       </Button>
-      <Button onClick={props?.onLeftClick} type="text" className={`Mark-RightBtn`}>
+      <Button onClick={props?.onLeftClick} className={`Mark-RightBtn`}>
         {props?.open ? <CaretLeftOutlined /> : <CaretRightOutlined />}
       </Button>
     </div>

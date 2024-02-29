@@ -1,15 +1,16 @@
-import React, {useMemo, useState} from "react";
+import React, {useMemo} from "react";
 import {HighlightDropdown} from "../Dropdown/HighlightDropdown";
 import classNames from "classnames";
 import './index.less';
 import './index.MarkNoteCard.less';
 import {useBoolean, useControllableValue} from "ahooks";
 import {ColorSelect} from "../index";
-import {Button, Divider} from "antd";
 import {Editor} from "@hocgin/editor";
 import {DeleteFilled} from "@ant-design/icons";
 import {DefaultMarkColor} from "../util/useMarkJS";
 import {MaskEntity} from "../type";
+import {Button} from '../Button';
+import {Divider} from '../Divider';
 
 export interface ValueType {
   id?: string;
@@ -43,11 +44,10 @@ export const MarkCard: React.FC<MarkCardProps> = ({...props}) => {
       {open ? <>
         <div className={"Mark-CardHeadRight"}>
           <div className={"Mark-CardHeadRightInner"}>
-            <Divider type={'vertical'} orientationMargin={0} />
+            <Divider />
             <ColorSelect value={color} onChange={(color) => setValue(v => ({...v, color}))} />
           </div>
-          <Button size={'small'} type={"text"} onClick={() => props?.onRemove?.(value?.id)}
-                  ghost><DeleteFilled /></Button>
+          <Button onClick={() => props?.onRemove?.(value?.id)}><DeleteFilled /></Button>
         </div>
       </> : <></>}
     </div>
@@ -77,13 +77,12 @@ export const MarkNoteCard: React.FC<MarkNoteCardOption> = ({...props}) => {
       <HighlightDropdown color={value?.color} open={open} onLeftClick={toggleOpen} />
       <div className={"MarkNote-CardHeadRight"}>
         {open ? <div className={"MarkNote-CardHeadRightInner"}>
-          <Divider type={'vertical'} orientationMargin={0} />
+          <Divider />
           <ColorSelect value={value?.color} onChange={(color) => {
             setValue(v => ({...v, color}))
           }} />
         </div> : <div style={{flex: '1 1'}} />}
-        <Button size={'small'} type={"text"} onClick={() => props?.onRemove?.(value?.id)}
-                ghost><DeleteFilled /></Button>
+        <Button onClick={() => props?.onRemove?.(value?.id)}><DeleteFilled /></Button>
       </div>
     </div>
     {open ? <div className={classNames('MarkNote-CardFooter')}>
