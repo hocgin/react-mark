@@ -1,38 +1,47 @@
+import DOMIterator from "../../mark.js/domiterator";
+import Mark from "../../mark.js/mark";
+
 type TextNodeType = ChildNode & {
   text: Text;
   ignore: boolean;
   offset: number;
 }
 
-let vTextNodes: any[] = [];
 
 /**
  * @intro 设置虚拟文本节点
  * @param textNodes
  */
-export function initVTextNodes(textNodes: TextNodeType[]) {
+export function initVTextNodes(textNodes: Node[]) {
   let offset = 0;
-  vTextNodes = [];
+  let vTextNodes = [];
   for (let i = 0; i < textNodes.length; i++) {
     const text = textNodes[i];
 
+    // @ts-ignore
+    let ignore = text?.ignore;
     vTextNodes.push({
       text,
-      ignore: text.ignore || false,
-      offset: text.ignore ? -1 : offset,
+      ignore: ignore || false,
+      offset: ignore ? -1 : offset,
     })
-    if (!text.ignore)
+    if (!ignore) {
       offset += text.textContent ? text.textContent.length : 0; //跳过忽略节点
+    }
   }
-  console.log(vTextNodes)
+  return vTextNodes;
 }
+
 
 /**
  * 切割文本字符串
+ * @param vTextNodes
  * @param text
  * @param offset
+ * @param tips
  */
-export function splitVTextNode(text: Text, offset: number): vText | void {
+export function splitVTextNode(vTextNodes: vText[], text: Text, offset: number, tips: string): vText | void {
+
   // debugger
   let i = vTextNodes.findIndex(item => item.text === text)
   if (i !== -1) {
@@ -45,16 +54,17 @@ export function splitVTextNode(text: Text, offset: number): vText | void {
       ignore: vTextNode.ignore,
       offset: vTextNode.offset + (textContent?.length || 0)
     }
+    console.log(`${tips}====> vTextNodes`, {vTextNodes, vTextNode, text, offset, newText, newVText, textContent});
     vTextNodes.splice(i + 1, 0, newVText)
     return newVText;
   } else {
-    console.log('vTextNodes', {vTextNodes}, text);
+    console.log(`${tips}/vTextNodes`, {vTextNodes}, text, i);
     console.error("bug，找不到可以splitVTextNode的节点，请联系开发人员")
   }
 }
 
 interface vText {
-  // text: Text, //文本节点
+  text: Text, //文本节点
   ignore: boolean,//是否是忽略节点
   offset: number, //相对起始节点的偏移量
 }
@@ -78,6 +88,8 @@ export function getTextNodes(node: Node, ignoreClass: string[] = [], ignore = fa
         element.ignore = true;
       }
     }
+
+
     if (element.nodeType === NodeTypes.TEXT_NODE && element.parentElement?.nodeName !== "SCRIPT" && element.textContent?.trim() !== "") {
       // console.log("element",element.nodeType,element.nodeName)
 
@@ -114,4 +126,37 @@ function getClassNames(node: Node) {
 export enum NodeTypes {
   ELEMENT_NODE = 1,
   TEXT_NODE = 3
+}
+
+export function getTextNode(el: Element | any) {
+  return new Promise((resolve, reject) => {
+    let nodes: HTMLElement[] = [];
+    new DOMIterator(el).forEachNode(NodeFilter.SHOW_TEXT, node => nodes.push(node), () => NodeFilter.FILTER_ACCEPT, () => resolve(nodes));
+  });
+}
+
+
+export function getAllTextNode(root: HTMLElement) {
+  console.log('root', root);
+  let nodes: Node[] = [];
+  let iterator = document.createNodeIterator(
+    root, // 根节点
+    NodeFilter.SHOW_TEXT, // 只包括元素节点
+    node => {
+      // 是否排除节点
+      if (Mark.matchesExclude(node.parentNode)) {
+        // 拒绝
+        return NodeFilter.FILTER_REJECT;
+      } else {
+        // 同意
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    }
+  );
+  let node;
+  while ((node = iterator.nextNode()) !== null) {
+    nodes.push(node);
+  }
+  console.log('nodes', {nodes});
+  return nodes;
 }

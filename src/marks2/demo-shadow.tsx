@@ -1,6 +1,7 @@
 import React, {useEffect} from "react"
 import ReactDOM from "react-dom";
 import {useMark} from "@hocgin/marks";
+import DOMIterator from '../mark.js/domiterator.js';
 
 const elementId = 'test';
 
@@ -26,6 +27,15 @@ export default () => {
 }
 
 const WebMask = () => {
-  let [markElement] = useMark(() => document.querySelector("body"), {});
+  let [markElement] = useMark(() => document.querySelector("html"), {});
+  useEffect(() => {
+    console.log('WebMask');
+
+    new DOMIterator(document.querySelector("html")).forEachNode(NodeFilter.SHOW_TEXT, node => {
+      console.log('node', node);
+    });
+
+  }, []);
+
   return <>{markElement}</>
 }

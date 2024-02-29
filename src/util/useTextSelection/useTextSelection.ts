@@ -2,7 +2,8 @@ import {useRef, useState} from 'react';
 import type {BasicTarget} from 'ahooks/lib/utils/domTarget';
 import {getTargetElement} from 'ahooks/lib/utils/domTarget';
 import useEffectWithTarget from 'ahooks/lib/utils/useEffectWithTarget';
-import {getTextNodes, initVTextNodes, splitVTextNode} from "./util";
+import {getAllTextNode, getTextNode, getTextNodes, initVTextNodes, splitVTextNode} from "./util";
+import DOMIterator from "@hocgin/marks/mark.js/domiterator";
 
 interface Rect {
   top: number;
@@ -49,17 +50,24 @@ function getRectFromSelection(selection: Selection | null, el: Element | Documen
   const sCntr = range.startContainer as Node as Text;
   const eCntr = range.endContainer as Node as Text;
 
+  // getTextNode(el).then(console.log);
+  let nodes = getAllTextNode(el as any);
+  console.log('nodes', {nodes});
+
+
   // 获取元素下所有文本节点
-  initVTextNodes(getTextNodes(el, []));
+  let allNode = initVTextNodes(nodes);
+
+  console.log('==> getRectFromSelection 选取范围 selection=', allNode);
 
   // 根据选中的文本节点去计算位置
-  const endTextNext = splitVTextNode(eCntr, range.endOffset) as any;
-  const startText = splitVTextNode(sCntr, range.startOffset) as any;
+  const endTextNext = splitVTextNode(allNode, eCntr, range.endOffset, 'eCntr') as any;
+  const startText = splitVTextNode(allNode, sCntr, range.startOffset, 'sCntr') as any;
   // if (!startText || !endTextNext) return;
   const start = startText?.offset;
   const end = endTextNext?.offset;
 
-  console.log('startText', {startText, eCntr, sCntr});
+  console.log('getRectFromSelection.startText', {end, start, startText, endTextNext, eCntr, sCntr, selection});
   const {height, width, top, left, right, bottom} = range.getBoundingClientRect();
   return {
     height,

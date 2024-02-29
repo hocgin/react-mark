@@ -1,4 +1,4 @@
-import {useAsyncEffect, useBoolean, useUpdateEffect} from "ahooks";
+import {useAsyncEffect, useBoolean, useTimeout, useUpdateEffect} from "ahooks";
 import React, {useMemo, useState} from "react";
 import {useTextSelection} from "../util/useTextSelection";
 import {MarkCard, ValueType} from "../MarkCard";
@@ -20,6 +20,8 @@ interface Option {
   //
   getUserConfig?: (key: string) => UserConfig
   saveUserConfig?: (key: string, config: UserConfig) => void
+  //
+  timeout?: number;
 }
 
 /**
@@ -53,7 +55,7 @@ export const useMark = (target: () => Element, option?: Option) => {
     return {fixTop: fixTop, fixLeft: fixLeft}
   }, [maskState]);
 
-  useAsyncEffect(async () => {
+  useTimeout(async () => {
     // 初始化备注
     let all = await queryAll(storageKey);
     all.forEach(e => mark(e, e.color));
@@ -61,16 +63,17 @@ export const useMark = (target: () => Element, option?: Option) => {
     // 初始化用户配置
     let userConfig = await getUserConfig(storageKey);
     setUserConfig(userConfig);
-  }, []);
+
+    // 延迟初始化，防止节点渲染未完全导致渲染位置出现错误
+  }, option?.timeout ?? 0);
 
   // useClickAway((e) => {
   //   console.log('useClickAway', {e});
   //   setOpen(false);
   // }, panelRef);
 
-  let {mark, unmark, getMarkRect} = useMarkJS(target, {
+  let {mark, unmark, getTextNodes, getMarkRect} = useMarkJS(target, {
     onClickMark: async (id, event) => {
-      console.log('click Mask');
       // todo: bug 3. 弹窗点击不消失
       // todo: feature 笔记内容标识，可以一键全部展示
       let entity = await query(storageKey, id);
@@ -131,7 +134,7 @@ export const useMark = (target: () => Element, option?: Option) => {
     {/*笔记标记*/}
     {/*弹窗部分*/}
     {open ? <>
-      <div style={maskStyle} onMouseDown={e => {
+      <div className={'ignore'} style={maskStyle} onMouseDown={e => {
         e.preventDefault();
         e.stopPropagation();
         e.nativeEvent.stopPropagation();
