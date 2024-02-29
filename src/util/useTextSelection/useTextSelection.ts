@@ -44,15 +44,13 @@ function getRectFromSelection(selection: Selection | null, el: Element | Documen
     return initRect;
   }
   const range = selection.getRangeAt(0);
-  const nodeValue = selection.focusNode?.nodeValue;
-  let markContent = el.textContent;
+  // const nodeValue = selection.focusNode?.nodeValue;
+  // let markContent = el.textContent;
   const sCntr = range.startContainer as Node as Text;
   const eCntr = range.endContainer as Node as Text;
 
   // 获取元素下所有文本节点
   initVTextNodes(getTextNodes(el, []));
-
-  console.log('markContent', {markContent, nodeValue, range});
 
   // 根据选中的文本节点去计算位置
   const endTextNext = splitVTextNode(eCntr, range.endOffset) as any;
@@ -61,7 +59,7 @@ function getRectFromSelection(selection: Selection | null, el: Element | Documen
   const start = startText?.offset;
   const end = endTextNext?.offset;
 
-  console.log('startText', {startText, sCntr});
+  console.log('startText', {startText, eCntr, sCntr});
   const {height, width, top, left, right, bottom} = range.getBoundingClientRect();
   return {
     height,

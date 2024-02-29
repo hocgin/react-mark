@@ -1,10 +1,16 @@
+type TextNodeType = ChildNode & {
+  text: Text;
+  ignore: boolean;
+  offset: number;
+}
+
 let vTextNodes: any[] = [];
 
 /**
  * @intro 设置虚拟文本节点
  * @param textNodes
  */
-export function initVTextNodes(textNodes: any[]) {
+export function initVTextNodes(textNodes: TextNodeType[]) {
   let offset = 0;
   vTextNodes = [];
   for (let i = 0; i < textNodes.length; i++) {
@@ -17,8 +23,8 @@ export function initVTextNodes(textNodes: any[]) {
     })
     if (!text.ignore)
       offset += text.textContent ? text.textContent.length : 0; //跳过忽略节点
-    // console.log(text.textContent)
   }
+  console.log(vTextNodes)
 }
 
 /**
@@ -42,7 +48,7 @@ export function splitVTextNode(text: Text, offset: number): vText | void {
     vTextNodes.splice(i + 1, 0, newVText)
     return newVText;
   } else {
-    console.log('vTextNodes', {vTextNodes, text, offset});
+    console.log('vTextNodes', {vTextNodes}, text);
     console.error("bug，找不到可以splitVTextNode的节点，请联系开发人员")
   }
 }
@@ -64,7 +70,7 @@ export function getTextNodes(node: Node, ignoreClass: string[] = [], ignore = fa
   let e = node.childNodes;
 
   for (let i = 0; i < e.length; i++) {
-    let element: any = e[i];
+    let element = e[i] as any;
     element.ignore = ignore;
     const classNames = getClassNames(element)
     if (ignoreClass.length > 0 && classNames.length > 0) {
