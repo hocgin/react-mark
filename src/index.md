@@ -12,5 +12,3 @@ title: used
 ### 基础用法
 
 Demo:
-
-<code src="./demos/use.tsx"  background="#f0f2f5" >use</code>
