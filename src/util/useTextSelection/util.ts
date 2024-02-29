@@ -1,4 +1,3 @@
-
 let vTextNodes: any[] = [];
 
 /**
@@ -98,7 +97,9 @@ function getClassNames(node: Node) {
   let classNames: string[] = []
   if (node.nodeType === NodeTypes.ELEMENT_NODE) {
     const ele = (node as Element);
-    classNames = ele.className ? ele.className.split(" ") : []
+    if (ele?.className?.split) {
+      classNames = ele.className.split(" ");
+    }
   }
   return classNames
 
