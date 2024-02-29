@@ -30,8 +30,7 @@ export function useMarkJS(target: () => Element, option?: MarkJSOption) {
 
   useEffect(() => {
     let context = target();
-    let mark = new Mark(context);
-    markRef.current = mark;
+    markRef.current = new Mark(context);
   }, []);
   let queryMarkElement = (id: string) => document.querySelector(`mark[data-selector="${id}"]`) as HTMLElement;
 
