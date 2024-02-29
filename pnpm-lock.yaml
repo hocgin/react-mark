@@ -9,8 +9,8 @@ dependencies:
     specifier: ^5.3.0
     version: 5.3.0(react-dom@18.2.0)(react@18.2.0)
   '@hocgin/editor':
-    specifier: ^0.0.7
-    version: 0.0.7(@tiptap/pm@2.2.4)(dayjs@1.11.10)(emoji-mart@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^0.0.8
+    version: 0.0.8(@tiptap/pm@2.2.4)(dayjs@1.11.10)(react-dom@18.2.0)(react@18.2.0)
   ahooks:
     specifier: ^3.7.10
     version: 3.7.10(react@18.2.0)
@@ -875,20 +875,6 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  /@emoji-mart/data@1.1.2:
-    resolution: {integrity: sha512-1HP8BxD2azjqWJvxIaWAMyTySeZY0Osr83ukYjltPVkNXeJvTz7yDrPLBtnrD5uqJ3tg4CcLuuBW09wahqL/fg==}
-    dev: false
-
-  /@emoji-mart/react@1.1.1(emoji-mart@5.5.2)(react@18.2.0):
-    resolution: {integrity: sha512-NMlFNeWgv1//uPsvLxvGQoIerPuVdXwK/EUek8OOkJ6wVOWPUizRBJU0hDqWZCOROVpfBgCemaC3m6jDOXi03g==}
-    peerDependencies:
-      emoji-mart: ^5.2
-      react: ^16.8 || ^17 || ^18
-    dependencies:
-      emoji-mart: 5.5.2
-      react: 18.2.0
-    dev: false
-
   /@emotion/hash@0.8.0:
     resolution: {integrity: sha512-kBJtf7PH6aWwZ6fka3zQ0p6SBYzx4fl1LoZXE2RrnYST9Xljm7WfKJrU4g/Xr3Beg72MLrp1AWNUmuYJTL7Cow==}
     dev: false
@@ -1450,15 +1436,13 @@ packages:
       typescript: 5.3.3
     dev: true
 
-  /@hocgin/editor@0.0.7(@tiptap/pm@2.2.4)(dayjs@1.11.10)(emoji-mart@5.5.2)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-SvgsNAPsad5Si/jvsM2Wxj9664lyoHykOfQJtuUV1iEuZV8Qljrxeu6cxGAQ6RfB1ii899M7p1f48FVzLzgwvg==}
+  /@hocgin/editor@0.0.8(@tiptap/pm@2.2.4)(dayjs@1.11.10)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-pzpiuMlKy0xm5D4xLNXwdORpZtNsJ64qsSEE/4S0j6rCEoZ4mC6+U/yGJO87NY3qe13rjK1ptsJOYG23/TR62A==}
     peerDependencies:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
     dependencies:
       '@ant-design/icons': 5.3.0(react-dom@18.2.0)(react@18.2.0)
-      '@emoji-mart/data': 1.1.2
-      '@emoji-mart/react': 1.1.1(emoji-mart@5.5.2)(react@18.2.0)
       '@hocgin/hkit': 2.0.143(dayjs@1.11.10)
       '@tiptap/core': 2.2.4(@tiptap/pm@2.2.4)
       '@tiptap/extension-blockquote': 2.2.4(@tiptap/core@2.2.4)
@@ -1507,6 +1491,7 @@ packages:
       antd: 5.14.2(react-dom@18.2.0)(react@18.2.0)
       classnames: 2.5.1
       codemirror: 5.65.16
+      emoji-picker-react: 4.8.0(react@18.2.0)
       react: 18.2.0
       react-color: 2.19.3(react@18.2.0)
       react-dom: 18.2.0(react@18.2.0)
@@ -1515,7 +1500,6 @@ packages:
       - '@tiptap/pm'
       - date-fns
       - dayjs
-      - emoji-mart
       - luxon
       - moment
     dev: false
@@ -5818,8 +5802,14 @@ packages:
       minimalistic-crypto-utils: 1.0.1
     dev: true
 
-  /emoji-mart@5.5.2:
-    resolution: {integrity: sha512-Sqc/nso4cjxhOwWJsp9xkVm8OF5c+mJLZJFoFfzRuKO+yWiN7K8c96xmtughYb0d/fZ8UC6cLIQ/p4BR6Pv3/A==}
+  /emoji-picker-react@4.8.0(react@18.2.0):
+    resolution: {integrity: sha512-gKv+NOM2FjNAokXqlhhmDJMLp1hBTx4X+OoYrPAK1qpTVBseoeybtqPBR1NXixTow7Vbxv1WOuI3SSTiEB089A==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+    dependencies:
+      flairup: 0.0.38
+      react: 18.2.0
     dev: false
 
   /emoji-regex@8.0.0:
@@ -6615,6 +6605,10 @@ packages:
       locate-path: 6.0.0
       path-exists: 4.0.0
     dev: true
+
+  /flairup@0.0.38:
+    resolution: {integrity: sha512-W9QA5TM7eYNlGoBYwfVn/o6v4yWBCxfq4+EJ5w774oFeyWvVWnYq6Dgt4CJltjG9y/lPwbOqz3jSSr8K66ToGg==}
+    dev: false
 
   /flat-cache@3.2.0:
     resolution: {integrity: sha512-CYcENa+FtcUKLmhhqyctpclsq7QF38pKjZHsGNiSQF5r4FtoKDWabFDl3hzaEQMvT1LHEysw5twgLvpYYb4vbw==}

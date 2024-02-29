@@ -1,10 +1,11 @@
 import React, {useRef} from "react";
-import {Panel, useMark} from "@hocgin/marks";
+import {useMark} from "../marks";
+import {Panel} from "../panel";
 
 
 export default () => {
   let bodyRef = useRef<HTMLDivElement | any>();
-  let {list, unmark, update} = useMark({el: bodyRef});
+  let {list = [], unmark, update} = useMark({el: bodyRef});
   console.log('useMark.list', {list});
 
   return <div>

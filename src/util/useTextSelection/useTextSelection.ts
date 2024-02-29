@@ -85,9 +85,9 @@ export function useTextSelection(target?: BasicTarget<Document | Element>): Stat
   useEffectWithTarget(
     () => {
       const el = getTargetElement(target, document);
-      if (!el) {
-        return;
-      }
+      if (!el) return;
+
+      console.log('el', el);
 
       const mouseupHandler = () => {
         let selObj: Selection | null = null;
