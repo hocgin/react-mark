@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import {IScroll, MaskEntity, StorageOpt} from "../type";
 import {useInfiniteScroll, useRequest} from "ahooks";
 import {MarkNoteCard} from "../MarkCard";
@@ -26,11 +26,16 @@ function asScroll<T>(result: IScroll<T>) {
 export const useMarkNote = (option: Option) => {
   let storageKey = option?.storageKey;
   let ref = useRef();
-  let {data, reloadAsync} = useInfiniteScroll(params => option.scroll(storageKey, params).then(asScroll), {
+  let [filter, setFilter] = useState<any>({});
+  let {
+    data,
+    reloadAsync
+  } = useInfiniteScroll(e => option.scroll(storageKey, {...filter, nextId: e.nextId}).then(asScroll), {
     manual: option?.manual,
     isNoMore: (d) => d?.nextId === undefined,
     target: ref,
     threshold: 200,
+    reloadDeps: [filter]
   });
   let $saveOrUpdate = useRequest(entity => option.saveOrUpdate(storageKey, entity), {
     manual: true,
@@ -43,6 +48,6 @@ export const useMarkNote = (option: Option) => {
       {(data?.list ?? []).map(e => <MarkNoteCard value={e} footer={option?.renderFooter?.(e)} onRemove={$remove.run}
                                                  onChange={$saveOrUpdate.runAsync} />)}
     </div>, {
-      reloadAsync: () => reloadAsync(),
+      runAsync: (filter: any = {}) => setFilter(filter),
     }] as const;
 }
