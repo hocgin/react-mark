@@ -8,7 +8,14 @@ export default () => {
   let contentRef = useRef<HTMLDivElement>();
   let [nodeElements] = useMarkNote({
     storageKey: 'MK',
-    queryAll: StorageKit.queryAll,
+    scroll: async (key, params) => {
+      let list = await StorageKit.queryAll(key);
+      return {
+        records: list,
+        nextId: undefined,
+        hasMore: false
+      };
+    },
     saveOrUpdate: StorageKit.saveOrUpdate,
     remove: StorageKit.remove,
   });
