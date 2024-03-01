@@ -1,9 +1,9 @@
-import React, {useMemo} from "react";
+import React, {useMemo, useState} from "react";
 import {HighlightDropdown} from "../Dropdown/HighlightDropdown";
 import classNames from "classnames";
 import './index.less';
 import './index.MarkNoteCard.less';
-import {useBoolean, useControllableValue} from "ahooks";
+import {useBoolean, useControllableValue, useUpdateEffect} from "ahooks";
 import {ColorSelect} from "../index";
 import {Editor} from "@hocgin/editor";
 import {DeleteFilled} from "@ant-design/icons";
@@ -68,10 +68,10 @@ interface MarkNoteCardOption {
 
 export const MarkNoteCard: React.FC<MarkNoteCardOption> = ({...props}) => {
   let [open, {toggle: toggleOpen}] = useBoolean(false);
-  const [value, setValue] = useControllableValue<ValueType>(props, {
-    defaultValue: undefined,
-  });
-  console.log('MarkNoteCard.value', {value});
+  const [value, setValue] = useState(props?.value);
+  useUpdateEffect(() => {
+    props?.onChange?.(value);
+  }, [value]);
   return <div className={classNames("MarkNote-Card", props.className)}>
     <div className={classNames("MarkNote-CardHead")} style={{borderColor: value?.color}}>
       {value?.text}

@@ -21,7 +21,8 @@ export const useMarkNote = (option: Option) => {
     manual: true,
   });
   return [<div style={{display: 'flex', flexDirection: 'column', gap: 4}}>
-    {($queryAll.data ?? []).map(e => <MarkNoteCard value={e} onRemove={$remove.run} onChange={$saveOrUpdate.run} />)}
+    {($queryAll.data ?? []).map(e =>
+      <MarkNoteCard value={e} onRemove={$remove.run} onChange={$saveOrUpdate.runAsync} />)}
   </div>, {
     refresh: () => $queryAll.refresh(),
   }] as const;
