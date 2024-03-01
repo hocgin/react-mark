@@ -62,6 +62,8 @@ interface MarkNoteCardOption {
   value: MaskEntity;
   onChange?: (value: MaskEntity) => void
   onRemove?: (id: string) => void;
+  className?: string;
+  footer?: React.ReactElement;
 }
 
 export const MarkNoteCard: React.FC<MarkNoteCardOption> = ({...props}) => {
@@ -69,7 +71,7 @@ export const MarkNoteCard: React.FC<MarkNoteCardOption> = ({...props}) => {
   const [value, setValue] = useControllableValue<ValueType>(props, {
     defaultValue: undefined,
   });
-  return <div className={classNames("MarkNote-Card")}>
+  return <div className={classNames("MarkNote-Card", props.className)}>
     <div className={classNames("MarkNote-CardHead")} style={{borderColor: value?.color}}>
       {value?.text}
     </div>
@@ -90,6 +92,7 @@ export const MarkNoteCard: React.FC<MarkNoteCardOption> = ({...props}) => {
         setValue(v => ({...v, note}))
       }} />
     </div> : <></>}
+    {props?.footer}
   </div>;
 }
 
