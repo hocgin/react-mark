@@ -80,17 +80,13 @@ export const MarkNoteCard: React.FC<MarkNoteCardOption> = ({...props}) => {
       <div className={"MarkNote-CardHeadRight"}>
         {open ? <div className={"MarkNote-CardHeadRightInner"}>
           <Divider />
-          <ColorSelect value={value?.color} onChange={(color) => {
-            setValue(v => ({...v, color}))
-          }} />
+          <ColorSelect value={value?.color} onChange={(color) => setValue(v => ({...v, color}))} />
         </div> : <div style={{flex: '1 1'}} />}
         <Button onClick={() => props?.onRemove?.(value?.id)}><DeleteFilled /></Button>
       </div>
     </div>
     {open ? <div className={classNames('MarkNote-CardFooter')}>
-      <Editor editable={true} value={value?.note} onChange={(note) => {
-        setValue(v => ({...v, note}))
-      }} />
+      <Editor editable={true} value={value?.note} onChange={(note) => setValue(v => ({...v, note}))} />
     </div> : <></>}
     {props?.footer}
   </div>;
