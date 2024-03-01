@@ -29,6 +29,7 @@ export const useMarkNote = (option: Option) => {
   let [filter, setFilter] = useState<any>({});
   let {
     data,
+    loading,
     reloadAsync
   } = useInfiniteScroll(e => option.scroll(storageKey, {...filter, nextId: e.nextId}).then(asScroll), {
     manual: option?.manual,
