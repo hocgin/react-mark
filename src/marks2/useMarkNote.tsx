@@ -2,8 +2,10 @@ import React, {useRef} from "react";
 import {IScroll, MaskEntity, StorageOpt} from "../type";
 import {useInfiniteScroll, useRequest} from "ahooks";
 import {MarkNoteCard} from "../MarkCard";
+import classNames from "classnames";
 
 type Option = {
+  className?: string;
   storageKey?: string;
   manual?: boolean;
   defaultParams?: any;
@@ -36,7 +38,7 @@ export const useMarkNote = (option: Option) => {
     manual: true,
   });
   return [
-    <div ref={ref} style={{display: 'flex', flexDirection: 'column', gap: 4}}>
+    <div ref={ref} style={{display: 'flex', flexDirection: 'column', gap: 4}} className={classNames(option?.className)}>
       {(data?.list ?? []).map(e => <MarkNoteCard value={e} onRemove={$remove.run} onChange={$saveOrUpdate.runAsync} />)}
     </div>, {
       reloadAsync: () => reloadAsync(),
