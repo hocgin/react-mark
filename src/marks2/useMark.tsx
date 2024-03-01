@@ -72,7 +72,7 @@ export const useMark = (target: () => Element, option?: Option) => {
   //   setOpen(false);
   // }, panelRef);
 
-  let {mark, unmark, getTextNodes, getMarkRect} = useMarkJS(target, {
+  let {mark, unmark, getMarkRect} = useMarkJS(target, {
     onClickMark: async (id, event) => {
       // todo: bug 3. 弹窗点击不消失
       // todo: feature 笔记内容标识，可以一键全部展示
