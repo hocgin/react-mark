@@ -71,6 +71,7 @@ export const MarkNoteCard: React.FC<MarkNoteCardOption> = ({...props}) => {
   const [value, setValue] = useControllableValue<ValueType>(props, {
     defaultValue: undefined,
   });
+  console.log('MarkNoteCard.value', {value});
   return <div className={classNames("MarkNote-Card", props.className)}>
     <div className={classNames("MarkNote-CardHead")} style={{borderColor: value?.color}}>
       {value?.text}
