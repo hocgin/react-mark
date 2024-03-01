@@ -37,3 +37,12 @@ export interface StorageOpt {
   getUserConfig?: (key: string) => UserConfig
   saveUserConfig?: (key: string, config: UserConfig) => void
 }
+
+export type ID = any;
+
+export interface IScroll<D = any> {
+  nextId?: ID;
+  hasMore: boolean;
+  records: D[];
+}
+
