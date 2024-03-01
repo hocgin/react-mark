@@ -12,6 +12,7 @@ type Option = {
   scroll?: (key: string, params?: any) => Promise<IScroll<MaskEntity>>
   saveOrUpdate?: (key: string, entity: MaskEntity) => Promise<void>
   remove?: (key: string, id: string) => Promise<void>
+  renderFooter?: (entity: MaskEntity) => React.ReactElement
 };
 
 function asScroll<T>(result: IScroll<T>) {
@@ -39,7 +40,8 @@ export const useMarkNote = (option: Option) => {
   });
   return [
     <div ref={ref} style={{display: 'flex', flexDirection: 'column', gap: 4}} className={classNames(option?.className)}>
-      {(data?.list ?? []).map(e => <MarkNoteCard value={e} onRemove={$remove.run} onChange={$saveOrUpdate.runAsync} />)}
+      {(data?.list ?? []).map(e => <MarkNoteCard value={e} footer={option?.renderFooter?.(e)} onRemove={$remove.run}
+                                                 onChange={$saveOrUpdate.runAsync} />)}
     </div>, {
       reloadAsync: () => reloadAsync(),
     }] as const;
