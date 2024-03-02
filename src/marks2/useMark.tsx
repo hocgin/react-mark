@@ -122,7 +122,7 @@ export const useMark = (target: () => Element, option?: Option) => {
 
   useEffect(() => {
     if (mode === Mode.pencil) {
-      document.body.style.cursor = getCursor(maskState.color ?? userConfig?.color);
+      document.body.style.cursor = getCursor(maskState?.color ?? userConfig?.color);
     } else {
       document.body.style.cursor = 'auto';
     }
