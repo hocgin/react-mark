@@ -122,11 +122,11 @@ export const useMark = (target: () => Element, option?: Option) => {
 
   useEffect(() => {
     if (mode === Mode.pencil) {
-      document.body.style.cursor = getCursor(maskState?.color);
+      document.body.style.cursor = getCursor(maskState.color ?? userConfig?.color);
     } else {
       document.body.style.cursor = undefined;
     }
-  }, [mode, maskState?.color])
+  }, [mode, maskState?.color, userConfig?.color])
 
   /**
    * 进行持久化
