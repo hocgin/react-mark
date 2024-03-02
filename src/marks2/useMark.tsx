@@ -1,4 +1,4 @@
-import {useAsyncEffect, useBoolean, useTimeout, useUpdateEffect} from "ahooks";
+import {useBoolean, useTimeout, useUpdateEffect} from "ahooks";
 import React, {useMemo, useState} from "react";
 import {useTextSelection} from "../util/useTextSelection";
 import {MarkCard, ValueType} from "../MarkCard";

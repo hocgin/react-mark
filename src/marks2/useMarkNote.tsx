@@ -1,5 +1,5 @@
 import React, {useRef, useState} from "react";
-import {IScroll, MaskEntity, StorageOpt} from "../type";
+import {IScroll, MaskEntity} from "../type";
 import {useInfiniteScroll, useRequest} from "ahooks";
 import {MarkNoteCard} from "../MarkCard";
 import classNames from "classnames";
