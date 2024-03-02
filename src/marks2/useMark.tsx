@@ -32,6 +32,10 @@ interface Option {
  * @param option
  */
 export const useMark = (target: () => Element, option?: Option) => {
+  // 是否开启标注功能
+  let [used, setUsed] = useState<boolean>(true);
+
+  // 是否显示批注
   let [isShow, setIsShow] = useState<boolean>(false);
   let [open, {set: setOpen}] = useBoolean(false);
   let [userConfig, setUserConfig] = useState<UserConfig>(DefaultUserConfig);
@@ -65,11 +69,11 @@ export const useMark = (target: () => Element, option?: Option) => {
 
   useTimeout(async () => {
     // 初始化备注
-    await showAll();
+    await callShowAll();
     // 延迟初始化，防止节点渲染未完全导致渲染位置出现错误
   }, option?.timeout ?? 0);
 
-  const showAll = async () => {
+  const callShowAll = async () => {
     setIsShow(true);
     let all = await queryAll(storageKey);
     all.forEach(e => mark(e, e.color));
@@ -98,7 +102,6 @@ export const useMark = (target: () => Element, option?: Option) => {
     }
     console.log('可以进行标注操作', {text});
   }, [text]);
-
   let maskStyle = {
     display: open ? 'block' : 'none',
     // ==========
@@ -133,10 +136,14 @@ export const useMark = (target: () => Element, option?: Option) => {
     remove(storageKey, id);
   };
 
+  let callHideAll = () => {
+    setIsShow(false);
+    hideAll();
+  };
   return [<>
     {/*笔记标记*/}
     {/*弹窗部分*/}
-    {open ? <>
+    {(used && open) ? <>
       <div className={'ignore'} style={maskStyle} onMouseDown={e => {
         e.preventDefault();
         e.stopPropagation();
@@ -149,13 +156,21 @@ export const useMark = (target: () => Element, option?: Option) => {
       </div>
     </> : <></>}
   </>, {
+    used,
+    // 开启功能
+    enabled: async (enabled: boolean = false) => {
+      setUsed(true);
+      if (enabled) await callShowAll();
+    },
+    // 关闭功能
+    disabled: async (disabled: boolean = false) => {
+      setUsed(false);
+      if (disabled) callHideAll();
+    },
     isShow,
     // 显示标注
-    showAll,
+    showAll: callShowAll,
     // 隐藏标注
-    hideAll: () => {
-      setIsShow(false);
-      hideAll();
-    },
+    hideAll: callHideAll,
   }] as const;
 };
