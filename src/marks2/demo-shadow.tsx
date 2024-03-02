@@ -27,15 +27,14 @@ export default () => {
 }
 
 const WebMask = () => {
-  let [markElement] = useMark(() => document.querySelector("html"), {});
+  let [markElement, {mode, setMode}] = useMark(() => document.querySelector("html"), {});
   useEffect(() => {
     console.log('WebMask');
 
-    new DOMIterator(document.querySelector("html")).forEachNode(NodeFilter.SHOW_TEXT, node => {
-      console.log('node', node);
-    });
 
   }, []);
 
-  return <>{markElement}</>
+  return <>
+    {markElement}
+  </>
 }

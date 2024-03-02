@@ -1,5 +1,5 @@
 import {useAsyncEffect, useBoolean, useTimeout, useUpdateEffect} from "ahooks";
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {useTextSelection} from "../util/useTextSelection";
 import {MarkCard, ValueType} from "../MarkCard";
 import {nanoid} from "nanoid";
@@ -12,7 +12,7 @@ type MaskState = MaskEntity & MaskRect;
 interface Option {
   storageKey?: string;
   // 模式: 画笔 / 手动
-  mode?: 'pencil' | 'manual';
+  mode?: Mode;
   queryAll?: (key: string) => Promise<MaskEntity[]>
   remove?: (key: string, id: string) => Promise<void>
   query?: (key: string, id: string) => Promise<MaskEntity>
@@ -24,6 +24,11 @@ interface Option {
   timeout?: number;
 }
 
+enum Mode {
+  pencil = 'pencil',
+  manual = 'manual'
+}
+
 /**
  *
  * - 手动标注
@@ -32,6 +37,9 @@ interface Option {
  * @param option
  */
 export const useMark = (target: () => Element, option?: Option) => {
+  // 标记模式
+  let [mode, setMode] = useState<Mode>(option?.mode ?? Mode.manual);
+
   // 是否开启标注功能
   let [used, setUsed] = useState<boolean>(true);
 
@@ -96,8 +104,8 @@ export const useMark = (target: () => Element, option?: Option) => {
     }
     setMaskState({text, start, color: userConfig?.color, end, left, top, height, right, width, bottom})
     setOpen(true);
-    console.log('option', option?.mode === 'pencil', {userConfig});
-    if (option?.mode === 'pencil') {
+    console.log('option', mode === Mode.pencil, {userConfig});
+    if (mode === Mode.pencil) {
       saveMark({text})
     }
     console.log('可以进行标注操作', {text});
@@ -110,6 +118,14 @@ export const useMark = (target: () => Element, option?: Option) => {
     top: `${fixTop}px`,
     left: `${fixLeft}px`,
   } as React.CSSProperties;
+
+  useEffect(() => {
+    if (mode === Mode.pencil) {
+      document.body.style.cursor = `pointer`;
+    } else {
+      document.body.style.cursor = undefined;
+    }
+  }, [mode])
 
   /**
    * 进行持久化
@@ -156,6 +172,7 @@ export const useMark = (target: () => Element, option?: Option) => {
       </div>
     </> : <></>}
   </>, {
+    // ========================
     used,
     // 开启功能
     enabled: async (enabled: boolean = false) => {
@@ -167,6 +184,11 @@ export const useMark = (target: () => Element, option?: Option) => {
       setUsed(false);
       if (disabled) callHideAll();
     },
+    // ========================
+    mode,
+    // 切换模式
+    setMode: setMode,
+    // ========================
     isShow,
     // 显示标注
     showAll: callShowAll,

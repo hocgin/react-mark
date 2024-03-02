@@ -19,7 +19,7 @@ export default () => {
     saveOrUpdate: StorageKit.saveOrUpdate,
     remove: StorageKit.remove,
   });
-  let [element] = useMark(() => contentRef.current, {
+  let [element, {setMode, mode}] = useMark(() => contentRef.current, {
     // mode: 'pencil'
   });
   return <>
@@ -37,6 +37,7 @@ export default () => {
         <p>\n</p>
       </div>
       <div style={{width: 500}}>
+        <div onClick={() => setMode('pencil' as any)}>{mode}</div>
         <h1>目录</h1>
         <div>
           {nodeElements}
