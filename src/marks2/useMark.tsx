@@ -6,6 +6,7 @@ import {nanoid} from "nanoid";
 import {StorageKit} from "../util/storage";
 import {DefaultUserConfig, MaskEntity, UserConfig} from "../type";
 import {MaskRect, useMarkJS} from "../util/useMarkJS";
+import {getCursor} from "@hocgin/marks/Dropdown/svg";
 
 type MaskState = MaskEntity & MaskRect;
 
@@ -121,11 +122,11 @@ export const useMark = (target: () => Element, option?: Option) => {
 
   useEffect(() => {
     if (mode === Mode.pencil) {
-      document.body.style.cursor = `pointer`;
+      document.body.style.cursor = getCursor(maskState?.color);
     } else {
       document.body.style.cursor = undefined;
     }
-  }, [mode])
+  }, [mode, maskState?.color])
 
   /**
    * 进行持久化

@@ -73,7 +73,6 @@ export const MarkNoteCard: React.FC<MarkNoteCardOption> = React.forwardRef(({...
     props?.onChange?.(value);
   }, [value]);
   return <div className={classNames("MarkNote-Card", props.className)}>
-    {/*todo: 展开/收起 操作*/}
     <TextExpend color={value.color}>{value.text}</TextExpend>
     <div className={classNames("MarkNote-CardBody")}>
       <HighlightDropdown color={value?.color} open={open} onLeftClick={toggleOpen} />
