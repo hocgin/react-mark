@@ -1,4 +1,4 @@
-import {useBoolean, useTimeout, useUpdateEffect} from "ahooks";
+import {useAsyncEffect, useBoolean, useTimeout, useUpdateEffect} from "ahooks";
 import React, {useMemo, useState} from "react";
 import {useTextSelection} from "../util/useTextSelection";
 import {MarkCard, ValueType} from "../MarkCard";
@@ -32,6 +32,7 @@ interface Option {
  * @param option
  */
 export const useMark = (target: () => Element, option?: Option) => {
+  let [isShow, setIsShow] = useState<boolean>(false);
   let [open, {set: setOpen}] = useBoolean(false);
   let [userConfig, setUserConfig] = useState<UserConfig>(DefaultUserConfig);
   const {storageKey, queryAll, query, remove, saveOrUpdate, getUserConfig, saveUserConfig} = useMemo(() => {
@@ -56,24 +57,25 @@ export const useMark = (target: () => Element, option?: Option) => {
     return {fixTop: fixTop, fixLeft: fixLeft}
   }, [maskState]);
 
-  useTimeout(async () => {
-    // 初始化备注
-    let all = await queryAll(storageKey);
-    all.forEach(e => mark(e, e.color));
-
+  useAsyncEffect(async () => {
     // 初始化用户配置
     let userConfig = await getUserConfig(storageKey);
     setUserConfig(userConfig);
+  }, []);
 
+  useTimeout(async () => {
+    // 初始化备注
+    await showAll();
     // 延迟初始化，防止节点渲染未完全导致渲染位置出现错误
   }, option?.timeout ?? 0);
 
-  // useClickAway((e) => {
-  //   console.log('useClickAway', {e});
-  //   setOpen(false);
-  // }, panelRef);
+  const showAll = async () => {
+    setIsShow(true);
+    let all = await queryAll(storageKey);
+    all.forEach(e => mark(e, e.color));
+  };
 
-  let {mark, unmark, getMarkRect} = useMarkJS(target, {
+  let {mark, unmark, getMarkRect, hideAll} = useMarkJS(target, {
     onClickMark: async (id, event) => {
       // todo: bug 3. 弹窗点击不消失
       // todo: feature 笔记内容标识，可以一键全部展示
@@ -146,5 +148,14 @@ export const useMark = (target: () => Element, option?: Option) => {
         <MarkCard value={maskState} onChange={saveMark} onRemove={onRemove} />
       </div>
     </> : <></>}
-  </>] as const;
+  </>, {
+    isShow,
+    // 显示标注
+    showAll,
+    // 隐藏标注
+    hideAll: () => {
+      setIsShow(false);
+      hideAll();
+    },
+  }] as const;
 };

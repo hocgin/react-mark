@@ -24,6 +24,7 @@ interface MarkJSOption {
 }
 
 export let DefaultMarkColor = `rgba(${ColorList?.[0]}, 0.3)`;
+const debug = false;
 
 export function useMarkJS(target: () => Element, option?: MarkJSOption) {
   let markRef = useRef<Mark>();
@@ -34,6 +35,13 @@ export function useMarkJS(target: () => Element, option?: MarkJSOption) {
   }, []);
   let queryMarkElement = (id: string) => document.querySelector(`*[data-selector="${id}"]`) as HTMLElement;
 
+  let unmark = (id: string) => {
+    let ins = markRef.current;
+    ins.unmark({
+      className: `mask-selected-${id}`,
+      debug
+    })
+  };
   return {
     getTextNodes: () => {
       let ins = markRef.current;
@@ -60,29 +68,24 @@ export function useMarkJS(target: () => Element, option?: MarkJSOption) {
             }
           },
           acrossElements: true,
-          debug: true
+          debug
         });
       }
       return id;
     },
-    unmark: (id: string) => {
-      let ins = markRef.current;
-      ins.unmark({
-        className: `mask-selected-${id}`,
-        debug: true
-      })
-    },
+    unmark,
     getMarkRect: (id: string) => {
       let maskEl = queryMarkElement(id);
       if (!maskEl) return;
       const {height, width, top, left, right, bottom} = maskEl.getBoundingClientRect();
       return {height, width, top, left, right, bottom} as MaskRect;
     },
-    showAll: () => {
-
-    },
-    show: () => {
-
+    hideAll: () => {
+      let elements = document.querySelectorAll<Element>(`*[data-selector]`) as NodeListOf<Element>;
+      elements.forEach(e => {
+        let id = e.getAttribute('data-selector');
+        unmark(id);
+      });
     },
   };
 }
