@@ -52,6 +52,7 @@ export const useMark = (target: () => Element, option?: Option) => {
   let {fixTop, fixLeft} = useMemo(() => {
     let fixTop = (maskState?.top + maskState?.height) ?? 0;
     let fixLeft = (maskState?.left + maskState?.width) ?? 0;
+    fixLeft = Math.max(window.innerWidth - 100, fixLeft);
     return {fixTop: fixTop, fixLeft: fixLeft}
   }, [maskState]);
 
