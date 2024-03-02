@@ -1,9 +1,9 @@
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import {HighlightDropdown} from "../Dropdown/HighlightDropdown";
 import classNames from "classnames";
 import './index.less';
 import './index.MarkNoteCard.less';
-import {useBoolean, useControllableValue, useUpdateEffect} from "ahooks";
+import {useBoolean, useControllableValue, useSize, useUpdateEffect} from "ahooks";
 import {ColorSelect} from "../index";
 import {Editor} from "@hocgin/editor";
 import {DeleteFilled} from "@ant-design/icons";
@@ -74,9 +74,7 @@ export const MarkNoteCard: React.FC<MarkNoteCardOption> = React.forwardRef(({...
   }, [value]);
   return <div className={classNames("MarkNote-Card", props.className)}>
     {/*todo: 展开/收起 操作*/}
-    <div className={classNames("MarkNote-CardHead")} style={{borderColor: value?.color}}>
-      {value?.text}
-    </div>
+    <TextExpend color={value.color}>{value.text}</TextExpend>
     <div className={classNames("MarkNote-CardBody")}>
       <HighlightDropdown color={value?.color} open={open} onLeftClick={toggleOpen} />
       <div className={"MarkNote-CardHeadRight"}>
@@ -94,4 +92,31 @@ export const MarkNoteCard: React.FC<MarkNoteCardOption> = React.forwardRef(({...
   </div>;
 });
 
+
+export interface TextExpendProps {
+  color?: string;
+  children?: React.ReactElement | string;
+}
+
+const TextExpend: React.FC<TextExpendProps> = ({...props}) => {
+  const ref = useRef<HTMLDivElement>();
+  const size = useSize(ref);
+  let [expend, {toggle: toggleExpend}] = useBoolean(false);
+  let [showToggle, {set: setShowToggle}] = useBoolean(false);
+  useEffect(() => {
+    let box = ref.current;
+    if (box.scrollWidth > box.clientWidth) {
+      setShowToggle(true)
+    }
+  }, [ref]);
+
+
+  return <div className={classNames("MarkNote-CardHead")} style={{borderColor: props?.color}}>
+    <span ref={ref} className={classNames('MarkNote-TextExpend', {
+      ["MarkNote-TextExpend-Open"]: expend,
+    })}>{props?.children}</span>
+    {showToggle &&
+      <span className={classNames('MarkNote-CardHead-Toggle')} onClick={toggleExpend}>{expend ? '收起' : '展开'}</span>}
+  </div>
+}
 
