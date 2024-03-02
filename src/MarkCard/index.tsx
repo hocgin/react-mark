@@ -100,7 +100,6 @@ export interface TextExpendProps {
 
 const TextExpend: React.FC<TextExpendProps> = ({...props}) => {
   const ref = useRef<HTMLDivElement>();
-  const size = useSize(ref);
   let [expend, {toggle: toggleExpend}] = useBoolean(false);
   let [showToggle, {set: setShowToggle}] = useBoolean(false);
   useEffect(() => {
@@ -109,8 +108,6 @@ const TextExpend: React.FC<TextExpendProps> = ({...props}) => {
       setShowToggle(true)
     }
   }, [ref]);
-
-
   return <div className={classNames("MarkNote-CardHead")} style={{borderColor: props?.color}}>
     <span ref={ref} className={classNames('MarkNote-TextExpend', {
       ["MarkNote-TextExpend-Open"]: expend,
