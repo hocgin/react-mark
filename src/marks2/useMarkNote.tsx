@@ -50,5 +50,6 @@ export const useMarkNote = (option: Option) => {
                                                  onChange={$saveOrUpdate.runAsync} />)}
     </div>, {
       runAsync: (filter: any = {}) => setFilter(filter),
+      reloadAsync
     }] as const;
 }
