@@ -31,7 +31,7 @@ export const useMarkNote = (option: Option) => {
     data,
     loading,
     reloadAsync
-  } = useInfiniteScroll(e => option.scroll(storageKey, {...filter, nextId: e?.nextId}).then(asScroll), {
+  } = useInfiniteScroll(e => option?.scroll?.(storageKey, {...filter, nextId: e?.nextId}).then(asScroll), {
     manual: option?.manual,
     isNoMore: (d) => d?.nextId === undefined,
     target: ref,
