@@ -42,8 +42,8 @@ export const useMarkNote = (option: Option) => {
   let $remove = useRequest(id => option.remove(storageKey, id), {manual: true});
   return [
     <div ref={ref} style={{display: 'flex', flexDirection: 'column', gap: 4}} className={classNames(option?.className)}>
-      {(data?.list ?? []).map(e =>
-        <MarkNoteCard value={e} footer={option?.renderFooter?.(e)} onRemove={$remove.run}
+      {(data?.list ?? []).map((e, i) =>
+        <MarkNoteCard key={e?.id ?? i} value={e} footer={option?.renderFooter?.(e)} onRemove={$remove.run}
                       onChange={$saveOrUpdate.runAsync} />)}
     </div>, {
       loading,

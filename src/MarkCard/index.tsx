@@ -66,7 +66,7 @@ interface MarkNoteCardOption {
   footer?: React.ReactElement;
 }
 
-export const MarkNoteCard: React.FC<MarkNoteCardOption> = ({...props}) => {
+export const MarkNoteCard: React.FC<MarkNoteCardOption> = React.forwardRef(({...props}) => {
   let [open, {toggle: toggleOpen}] = useBoolean(false);
   const [value, setValue] = useState(props?.value);
   useUpdateEffect(() => {
@@ -91,5 +91,6 @@ export const MarkNoteCard: React.FC<MarkNoteCardOption> = ({...props}) => {
     </div> : <></>}
     {props?.footer}
   </div>;
-}
+});
+
 
