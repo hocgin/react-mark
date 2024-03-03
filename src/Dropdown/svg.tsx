@@ -5,7 +5,7 @@ export const HighlightColor = (color: string = '#000') => (
     <title>icon/填充色</title>
     <g id='icon/填充色' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
       <g id='icon/背景颜色'>
-        <g id='编组' fill='#262626'>
+        <g id='编组' fill='var(--dark-color, #262626)'>
           <g
             transform='translate(119.502295, 137.878331) rotate(-135.000000) translate(-119.502295, -137.878331) translate(48.002295, 31.757731)'
             id='矩形'>
