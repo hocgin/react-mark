@@ -21,7 +21,11 @@
   }
 }
 
-:global(.dark) .Mark-Button {
+.dark .Mark-Button {
   --dark-color: rgba(255, 255, 255, 0.85);
   color: var(--dark-color);
+
+  &:hover {
+    background-color: #303030;
+  }
 }
