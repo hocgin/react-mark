@@ -9,8 +9,8 @@ dependencies:
     specifier: ^5.3.0
     version: 5.3.0(react-dom@18.2.0)(react@18.2.0)
   '@hocgin/editor':
-    specifier: ^0.0.8
-    version: 0.0.8(@tiptap/pm@2.2.4)(dayjs@1.11.10)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^0.0.9
+    version: 0.0.9(@tiptap/pm@2.2.4)(dayjs@1.11.10)(react-dom@18.2.0)(react@18.2.0)
   ahooks:
     specifier: ^3.7.10
     version: 3.7.10(react@18.2.0)
@@ -1427,8 +1427,8 @@ packages:
       typescript: 5.3.3
     dev: true
 
-  /@hocgin/editor@0.0.8(@tiptap/pm@2.2.4)(dayjs@1.11.10)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-pzpiuMlKy0xm5D4xLNXwdORpZtNsJ64qsSEE/4S0j6rCEoZ4mC6+U/yGJO87NY3qe13rjK1ptsJOYG23/TR62A==}
+  /@hocgin/editor@0.0.9(@tiptap/pm@2.2.4)(dayjs@1.11.10)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-u9DrNC4iwSeAhvyJ4/8vUglFJwTU3tAVMUEocpXmODpNmG1nQVceUSPp9PjXnoGcLfi5E1AMJIhFFYD5ROcL1w==}
     peerDependencies:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
