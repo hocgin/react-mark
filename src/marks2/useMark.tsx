@@ -83,6 +83,7 @@ export const useMark = (target: () => Element, option?: Option) => {
   }, option?.timeout ?? 0);
 
   const callShowAll = async () => {
+    if (isShow) return;
     setIsShow(true);
     let all = await queryAll(storageKey);
     all.forEach(e => mark(e, e.color));
@@ -154,6 +155,7 @@ export const useMark = (target: () => Element, option?: Option) => {
   };
 
   let callHideAll = () => {
+    if (!isShow) return;
     setIsShow(false);
     hideAll();
   };
