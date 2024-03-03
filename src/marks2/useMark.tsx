@@ -7,6 +7,7 @@ import {StorageKit} from "../util/storage";
 import {DefaultUserConfig, MaskEntity, UserConfig} from "../type";
 import {MaskRect, useMarkJS} from "../util/useMarkJS";
 import {getCursor} from "@hocgin/marks/Dropdown/svg";
+import classNames from "classnames";
 
 type MaskState = MaskEntity & MaskRect;
 
@@ -163,7 +164,7 @@ export const useMark = (target: () => Element, option?: Option) => {
     {/*笔记标记*/}
     {/*弹窗部分*/}
     {(used && open) ? <>
-      <div className={'ignore'} style={maskStyle} onMouseDown={e => {
+      <div className={classNames('ignore', 'MarkPencil')} style={maskStyle} onMouseDown={e => {
         e.preventDefault();
         e.stopPropagation();
         e.nativeEvent.stopPropagation();
