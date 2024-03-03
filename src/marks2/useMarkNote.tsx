@@ -13,6 +13,7 @@ type Option = {
   saveOrUpdate?: (key: string, entity: MaskEntity) => Promise<void>
   remove?: (key: string, id: string) => Promise<void>
   renderFooter?: (entity: MaskEntity) => React.ReactElement
+  renderEmpty?: () => React.ReactElement;
 };
 
 function asScroll<T>(result: IScroll<T>) {
@@ -45,6 +46,7 @@ export const useMarkNote = (option: Option) => {
       {(data?.list ?? []).map((e, i) =>
         <MarkNoteCard key={e?.id ?? i} value={e} footer={option?.renderFooter?.(e)} onRemove={$remove.run}
                       onChange={$saveOrUpdate.runAsync} />)}
+      {data?.list?.length ? <></> : option?.renderEmpty?.()}
     </div>, {
       loading,
       runAsync: (filter: any = {}) => setFilter(filter),
