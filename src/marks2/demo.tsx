@@ -22,7 +22,7 @@ export default () => {
   let [element, {setMode, mode}] = useMark(() => contentRef.current, {
     // mode: 'pencil'
   });
-  return <>
+  return <div style={{['--background-color']:'255, 255, 255'} as any}>
     {element}
     <div style={{display: 'flex', flexDirection: 'row'}}>
       <div ref={contentRef} style={{flex: '1 1'}}>
@@ -45,5 +45,5 @@ export default () => {
       </div>
     </div>
 
-  </>;
+  </div>;
 };

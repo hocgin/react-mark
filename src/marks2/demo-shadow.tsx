@@ -34,7 +34,7 @@ const WebMask = () => {
 
   }, []);
 
-  return <>
+  return <div style={{['--background-color']:'255,255,255'} as any}>
     {markElement}
-  </>
+  </div>
 }
