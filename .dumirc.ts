@@ -17,6 +17,8 @@ export default defineConfig({
   themeConfig: {
     name: '@hocgin/marks',
   },
+  exportStatic: {},
+  ignoreMomentLocale: true,
   extraBabelPlugins: [...useLogger()],
   ssr: process.env.NODE_ENV === 'development' ? false : {},
 });
