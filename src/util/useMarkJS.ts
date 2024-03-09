@@ -1,6 +1,7 @@
 import {useEffect, useRef} from "react";
 import Mark from "../mark.js/mark.js";
 import {ColorList} from "@hocgin/marks/panel";
+import {BasicTarget, getTargetElement} from "ahooks/lib/utils/domTarget";
 
 export interface MaskRect {
   top: number;
@@ -26,11 +27,11 @@ interface MarkJSOption {
 export let DefaultMarkColor = `rgba(${ColorList?.[0]}, 0.3)`;
 const debug = false;
 
-export function useMarkJS(target: () => Element, option?: MarkJSOption) {
+export function useMarkJS(target?: BasicTarget<Document | Element>, option?: MarkJSOption) {
   let markRef = useRef<Mark>();
 
   useEffect(() => {
-    let context = target();
+    let context = getTargetElement(target, document);
     markRef.current = new Mark(context);
   }, []);
   let queryMarkElement = (id: string) => document.querySelector(`*[data-selector="${id}"]`) as HTMLElement;

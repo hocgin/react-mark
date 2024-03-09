@@ -8,6 +8,7 @@ import {DefaultUserConfig, MaskEntity, UserConfig} from "../type";
 import {MaskRect, useMarkJS} from "../util/useMarkJS";
 import {getCursor} from "@hocgin/marks/Dropdown/svg";
 import classNames from "classnames";
+import {BasicTarget} from "ahooks/lib/utils/domTarget";
 
 type MaskState = MaskEntity & MaskRect;
 
@@ -38,7 +39,7 @@ enum Mode {
  * @param target
  * @param option
  */
-export const useMark = (target: () => Element, option?: Option) => {
+export const useMark = (target?: BasicTarget<Document | Element>, option?: Option) => {
   // 标记模式
   let [mode, setMode] = useState<Mode>(option?.mode ?? Mode.manual);
 
