@@ -27,6 +27,11 @@ interface MarkJSOption {
 export let DefaultMarkColor = `rgba(${ColorList?.[0]}, 0.3)`;
 const debug = false;
 
+/**
+ *
+ * @param target
+ * @param option
+ */
 export function useMarkJS(target?: BasicTarget<Document | Element>, option?: MarkJSOption) {
   let markRef = useRef<Mark>();
 
@@ -38,10 +43,7 @@ export function useMarkJS(target?: BasicTarget<Document | Element>, option?: Mar
 
   let unmark = (id: string) => {
     let ins = markRef.current;
-    ins.unmark({
-      className: `mask-selected-${id}`,
-      debug
-    })
+    ins.unmark({className: `mask-selected-${id}`, debug})
   };
   return {
     getTextNodes: () => {
