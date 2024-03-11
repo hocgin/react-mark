@@ -14,7 +14,7 @@ export interface MaskRect {
 
 interface ItemType {
   id?: string;
-  text: string;
+  text?: string;
   note?: string;
   start: number;
   end: number;
