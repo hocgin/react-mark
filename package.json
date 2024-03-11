@@ -2,8 +2,12 @@
   "name": "@hocgin/marks",
   "version": "0.0.1",
   "description": "A React Marks",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "npm run dev",
     "dev": "dumi dev",
@@ -22,9 +26,6 @@
     "hocgin@gmail.com"
   ],
   "license": "MIT",
-  "files": [
-    "dist"
-  ],
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
