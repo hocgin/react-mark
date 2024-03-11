@@ -21,7 +21,7 @@ interface ItemType {
 }
 
 interface MarkJSOption {
-  onClickMark: (id: string, event: any) => void;
+  onClickMark?: (id: string, event: any) => void;
 }
 
 export let DefaultMarkColor = `rgba(${ColorList?.[0]}, 0.3)`;
@@ -66,7 +66,7 @@ export function useMarkJS(target?: BasicTarget<Document | Element>, option?: Mar
           each: (element: HTMLElement, range) => {
             element.setAttribute("data-selector", id)
             element.style.backgroundColor = color;
-            if (option.onClickMark) {
+            if (option?.onClickMark) {
               element.onclick = option.onClickMark.bind(this, id)
             }
           },
